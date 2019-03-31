@@ -68,8 +68,8 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Configure your database
 config :story_board, StoryBoard.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "story_board",
+  password: "aoL3eexaur4S",
   database: "story_board_dev",
   hostname: "localhost",
   pool_size: 10

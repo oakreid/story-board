@@ -11,8 +11,8 @@ config :logger, level: :warn
 
 # Configure your database
 config :story_board, StoryBoard.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "story_board",
+  password: "aoL3eexaur4S",
   database: "story_board_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
