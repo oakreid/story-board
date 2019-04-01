@@ -3,11 +3,11 @@ defmodule StoryBoardWeb.ArticleController do
 
   alias StoryBoard.Articles
   alias StoryBoard.Articles.Article
-  alias StoryBoardWeb.Endpoint
 
   action_fallback StoryBoardWeb.FallbackController
 
   def fcuf_articles(conn, %{"user_id" => user_id}) do
+    IO.puts("[HIT SERVER] fcuf user id: " <> inspect(user_id))
     with {:ok, cuf} <- Articles.fcuf_articles(user_id) do
       resp = %{
         data: %{
@@ -26,11 +26,11 @@ defmodule StoryBoardWeb.ArticleController do
   end
 
   def create(conn, %{"article" => article_params}) do
+    IO.puts("[HIT SERVER] create article: " <> inspect(article_params))
     with {:ok, %Article{} = article} <- Articles.create_article(article_params) do
       conn
-      |> put_status(:created)
       |> put_resp_header("location", Routes.article_path(conn, :show, article))
-      |> render("show.json", article: article)
+      |> send_resp(:created, "")
     end
   end
 
@@ -48,6 +48,7 @@ defmodule StoryBoardWeb.ArticleController do
   end
 
   def delete(conn, %{"id" => id}) do
+    IO.puts("[HIT SERVER] delete article: " <> inspect(id))
     article = Articles.get_article!(id)
 
     with {:ok, %Article{}} <- Articles.delete_article(article) do

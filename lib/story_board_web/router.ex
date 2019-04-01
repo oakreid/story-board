@@ -25,7 +25,9 @@ defmodule StoryBoardWeb.Router do
     resources "/users", UserController, except: [:new, :edit]
     resources "/articles", ArticleController, except: [:new, :edit]
 
-    get "/fcuf_articles", ArticleController, :fcuf_articles
+    post "/fcuf_articles", ArticleController, :fcuf_articles
+    post "/favorite", ArticleController, :create
+    post "/unfavorite", ArticleController, :delete
 
     post "/login", UserController, :login
     post "/register", UserController, :create

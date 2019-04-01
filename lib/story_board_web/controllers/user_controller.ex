@@ -8,6 +8,8 @@ defmodule StoryBoardWeb.UserController do
   action_fallback StoryBoardWeb.FallbackController
 
   def login(conn, %{"username" => username, "password" => password}) do
+    IO.puts("[HIT SERVER] login user: " <> inspect(username))
+    IO.puts(inspect(username))
     with {:ok, %User{} = user} <- Users.get_and_auth_user(username, password) do
       resp = %{
         data: %{
@@ -27,6 +29,7 @@ defmodule StoryBoardWeb.UserController do
   end
 
   def create(conn, %{"username" => username, "password" => password}) do
+    IO.puts("[HIT SERVER] register user: " <> inspect(username))
     with {:ok, %User{} = user} <- Users.create_user(username, password) do
       resp = %{
         data: %{
