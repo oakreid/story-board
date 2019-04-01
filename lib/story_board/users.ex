@@ -8,6 +8,15 @@ defmodule StoryBoard.Users do
 
   alias StoryBoard.Users.User
 
+  def get_user_by_username(username) do
+    Repo.get_by(User, username: username)
+  end
+
+  def get_and_auth_user(username, password) do
+    get_user_by_username(username)
+    |> Argon2.check_pass(password)
+  end
+
   @doc """
   Returns the list of users.
 
@@ -49,7 +58,8 @@ defmodule StoryBoard.Users do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_user(attrs \\ %{}) do
+  def create_user(username, password) do
+    attrs = %{"username" => username, "password_hash" => Argon2.hash_pwd_salt(password)}
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert()

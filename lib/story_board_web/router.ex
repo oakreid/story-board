@@ -17,12 +17,17 @@ defmodule StoryBoardWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    resources "/users", UserController, except: [:new, :edit]
-    resources "/articles", ArticleController, except: [:new, :edit]
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", StoryBoardWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", StoryBoardWeb do
+    pipe_through :api
+
+    resources "/users", UserController, except: [:new, :edit]
+    resources "/articles", ArticleController, except: [:new, :edit]
+
+    get "/fcuf_articles", ArticleController, :fcuf_articles
+
+    post "/login", UserController, :login
+    post "/register", UserController, :create
+  end
 end

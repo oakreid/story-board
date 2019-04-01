@@ -3,8 +3,22 @@ defmodule StoryBoardWeb.ArticleController do
 
   alias StoryBoard.Articles
   alias StoryBoard.Articles.Article
+  alias StoryBoardWeb.Endpoint
 
   action_fallback StoryBoardWeb.FallbackController
+
+  def fcuf_articles(conn, %{"user_id" => user_id}) do
+    with {:ok, cuf} <- Articles.fcuf_articles(user_id) do
+      resp = %{
+        data: %{
+          cuf: cuf
+        }
+      }
+      conn
+      |> put_resp_header("content-type", "application/json; charset=UTF-8")
+      |> send_resp(:created, Jason.encode!(resp))
+    end
+  end
 
   def index(conn, _params) do
     articles = Articles.list_articles()

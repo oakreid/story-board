@@ -9,3 +9,11 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+alias StoryBoard.Repo
+alias StoryBoard.Users.User
+alias StoryBoard.Articles.Article
+
+test_hash = Argon2.hash_pwd_salt("test")
+
+Repo.insert!(%User{username: "test", password_hash: test_hash})

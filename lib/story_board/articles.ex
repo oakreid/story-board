@@ -8,6 +8,11 @@ defmodule StoryBoard.Articles do
 
   alias StoryBoard.Articles.Article
 
+  def fcuf_articles(uid) do
+    list_articles()
+    |> Enum.filter(fn(x) -> x.user_id == uid end)
+  end
+
   @doc """
   Returns the list of articles.
 

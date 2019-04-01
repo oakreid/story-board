@@ -15,3 +15,19 @@ import "phoenix_html"
 //
 // Local files can be imported directly using relative paths, for example:
 // import socket from "./socket"
+
+import jQuery from 'jquery';
+window.jQuery = window.$ = jQuery;
+import _ from "lodash";
+
+// Import local files
+//
+// Local files can be imported directly using relative paths, for example:
+// import socket from "./socket"
+
+import root_init from "./root";
+
+$(() => {
+  let node = $('#root')[0];
+  root_init(node);
+});
