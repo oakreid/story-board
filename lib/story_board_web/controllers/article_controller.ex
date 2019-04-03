@@ -6,17 +6,31 @@ defmodule StoryBoardWeb.ArticleController do
 
   action_fallback StoryBoardWeb.FallbackController
 
+  def fcuf_articles(conn, %{"user_id" => user_id}) do
+    IO.puts("[HIT SERVER] fcuf user id: " <> inspect(user_id))
+    favorite_articles = Articles.fcuf_articles(user_id)
+    IO.puts(inspect(favorite_articles))
+    resp = %{
+      data: %{
+        cuf: favorite_articles
+      }
+    }
+    conn
+    |> put_resp_header("content-type", "application/json; charset=UTF-8")
+    |> send_resp(:created, Jason.encode!(resp))
+  end
+
   def index(conn, _params) do
     articles = Articles.list_articles()
     render(conn, "index.json", articles: articles)
   end
 
   def create(conn, %{"article" => article_params}) do
+    IO.puts("[HIT SERVER] create article: " <> inspect(article_params))
     with {:ok, %Article{} = article} <- Articles.create_article(article_params) do
       conn
-      |> put_status(:created)
       |> put_resp_header("location", Routes.article_path(conn, :show, article))
-      |> render("show.json", article: article)
+      |> send_resp(:created, "")
     end
   end
 
@@ -34,6 +48,7 @@ defmodule StoryBoardWeb.ArticleController do
   end
 
   def delete(conn, %{"id" => id}) do
+    IO.puts("[HIT SERVER] delete article: " <> inspect(id))
     article = Articles.get_article!(id)
 
     with {:ok, %Article{}} <- Articles.delete_article(article) do
