@@ -11,6 +11,7 @@ defmodule StoryBoard.Articles do
   def fcuf_articles(uid) do
     list_articles()
     |> Enum.filter(fn(x) -> x.user_id == uid end)
+    |> Enum.map(fn(x) -> x |> Map.from_struct() |> Map.drop([:__meta__, :user]) end)
   end
 
   @doc """

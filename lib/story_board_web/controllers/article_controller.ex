@@ -8,16 +8,16 @@ defmodule StoryBoardWeb.ArticleController do
 
   def fcuf_articles(conn, %{"user_id" => user_id}) do
     IO.puts("[HIT SERVER] fcuf user id: " <> inspect(user_id))
-    with {:ok, cuf} <- Articles.fcuf_articles(user_id) do
-      resp = %{
-        data: %{
-          cuf: cuf
-        }
+    favorite_articles = Articles.fcuf_articles(user_id)
+    IO.puts(inspect(favorite_articles))
+    resp = %{
+      data: %{
+        cuf: favorite_articles
       }
-      conn
-      |> put_resp_header("content-type", "application/json; charset=UTF-8")
-      |> send_resp(:created, Jason.encode!(resp))
-    end
+    }
+    conn
+    |> put_resp_header("content-type", "application/json; charset=UTF-8")
+    |> send_resp(:created, Jason.encode!(resp))
   end
 
   def index(conn, _params) do

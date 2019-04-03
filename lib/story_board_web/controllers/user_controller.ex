@@ -9,7 +9,6 @@ defmodule StoryBoardWeb.UserController do
 
   def login(conn, %{"username" => username, "password" => password}) do
     IO.puts("[HIT SERVER] login user: " <> inspect(username))
-    IO.puts(inspect(username))
     with {:ok, %User{} = user} <- Users.get_and_auth_user(username, password) do
       resp = %{
         data: %{

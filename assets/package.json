@@ -7,14 +7,18 @@
   },
   "dependencies": {
     "@babel/preset-react": "^7.0.0",
+    "bootstrap": "^4.3.1",
     "jquery": "^3.3.1",
     "lodash": "^4.17.11",
     "newsapi": "^2.4.0",
+    "node-sass": "^4.11.0",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
+    "popper.js": "^1.14.7",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-router-dom": "^5.0.0"
+    "react-router-dom": "^5.0.0",
+    "sass-loader": "^7.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
