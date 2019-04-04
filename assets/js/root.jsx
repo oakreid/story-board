@@ -6,6 +6,7 @@ import { Link, BrowserRouter as Router, Route } from 'react-router-dom';
 import Header from "./components/header.jsx";
 import Favorites from "./components/favorites.jsx";
 import Home from "./components/home.jsx"
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
 export default function root_init(node) {
   ReactDOM.render(<Root />, node);
