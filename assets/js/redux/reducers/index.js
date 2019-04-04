@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import _ from lodash;
+import _ from 'lodash';
 
 const initialState = {
   login_form: {username: "", password: ""},
@@ -11,13 +11,15 @@ const initialState = {
 const reducer = (state=initialState, action) => {
   switch(action.type) {
     case "LOGIN":
+      const { login_form } = action;
       $.ajax("/api/login", {
         method: "post",
         dataType: "json",
         contentType: "application/json; charset=UTF-8",
-        data: JSON.stringify(state.login_form),
+        data: JSON.stringify(login_form),
         success: (resp) => {
           let new_state = _.assign({}, state, {session: resp.data});
+          console.log(new_state)
           return new_state;
         }
       });
@@ -82,3 +84,9 @@ const reducer = (state=initialState, action) => {
       return state;
   }
 }
+
+const rootReducer = combineReducers({
+  reducer
+});
+
+export default rootReducer

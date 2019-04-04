@@ -21,6 +21,14 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import {login} from '../redux/actions';
+import {connect} from 'react-redux';
 
 const styles = theme => ({
   root: {
@@ -98,9 +106,20 @@ class Header extends React.Component {
     this.state = {
       anchorEl: null,
       mobileMoreAnchorEl: null,
-      root: props.root
+      root: props.root,
+      open: false
     };
+    this.username = "";
+    this.password = "";
   }
+
+  handleClickOpen = () => {
+    this.setState({ open: true });
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
 
   handleProfileMenuOpen = event => {
     this.setState({ anchorEl: event.currentTarget });
@@ -118,6 +137,23 @@ class Header extends React.Component {
   handleMobileMenuClose = () => {
     this.setState({ mobileMoreAnchorEl: null });
   };
+
+  onUsernameChange = (event) => {
+    this.username = event.target.value;
+  }
+
+  onPasswordChange = (event) => {
+    this.password = event.target.value;
+  }
+
+  onLogin = () => {
+    this.props.login(
+      {
+        username: this.username,
+        password: this.password
+      }
+    )
+  }
 
   render() {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
@@ -235,9 +271,44 @@ class Header extends React.Component {
               />
             </div>
             <div className={classes.grow} />
-            <div className={classes.sectionDesktop}>
+            <div className={classes.sectionDesktop} onClick={this.handleClickOpen}>
               <Button color="inherit">Login</Button>
             </div>
+            <Dialog
+          open={this.state.open}
+          onClose={this.handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              To subscribe to this website, please enter your email address here. We will send
+              updates occasionally.
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              onChange={(event) => this.onUsernameChange(event)}
+              label="Username"
+              fullWidth
+            />
+            <TextField
+              margin="dense"
+              onChange={(event) => this.onPasswordChange(event)}
+              label="Password"
+              type="password"
+              fullWidth
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.onLogin} color="primary">
+              Login
+            </Button>
+          </DialogActions>
+        </Dialog>
             <div className={classes.sectionDesktop}>
               <Button color="inherit">Register</Button>
             </div>
@@ -250,8 +321,25 @@ class Header extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    login_form: state.login_form,
+    session: state.session,
+    current_user_favorites: state.current_user_favorites,
+    search_bar: state.search
+  }
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    login: (login_form) => dispatch(login(login_form))
+  }
+}
+
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
 };
+
+Header = connect(mapStateToProps, mapDispatchToProps)(Header);
 
 export default withStyles(styles)(Header);

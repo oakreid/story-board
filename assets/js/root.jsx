@@ -7,9 +7,18 @@ import Header from "./components/header.jsx";
 import Favorites from "./components/favorites.jsx";
 import Home from "./components/home.jsx"
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import {Provider, connect} from 'react-redux';
+import {createStore} from 'redux';
+import { login, logout, register, fcuf, favorite } from './redux/actions';
+import rootReducer from './redux/reducers';
+
+const store = createStore(rootReducer);
 
 export default function root_init(node) {
-  ReactDOM.render(<Root />, node);
+  ReactDOM.render(
+    <Provider store={store}>
+      <Root />
+    </Provider>, node);
 }
 
 class Root extends React.Component {
@@ -37,7 +46,7 @@ class Root extends React.Component {
   render() {
     return (<div>
       <Router>
-        <Header root={this} />
+        <Header login={login} root={this} />
         <Route path="/" exact={true} render={ () =>
           <Home root={this} />
         } />
@@ -48,3 +57,24 @@ class Root extends React.Component {
     </div>);
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    login_form: state.login_form,
+    session: state.session,
+    current_user_favorites: state.current_user_favorites,
+    search_bar: state.search
+  }
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    login: (state) => dispatch(login(state)),
+    logout: () => dispatch(logout()),
+    register: (state) => dispatch(register(state)),
+    fcuf: (state) => dispatch(fcuf(state)),
+    favorite: (state) => dispatch(favorite(state))
+  }
+}
+
+Root = connect(mapStateToProps, mapDispatchToProps)(Root);
