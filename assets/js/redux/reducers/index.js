@@ -1,25 +1,24 @@
 import { combineReducers } from 'redux';
-import _ from 'lodash';
+import _ from lodash;
 
 const initialState = {
   login_form: {username: "", password: ""},
   session: null,
   current_user_favorites: [],
-  search_bar: ""
+  search_bar: "",
+  search_results: []
 }
 
 const reducer = (state=initialState, action) => {
   switch(action.type) {
     case "LOGIN":
-      const { login_form } = action;
       $.ajax("/api/login", {
         method: "post",
         dataType: "json",
         contentType: "application/json; charset=UTF-8",
-        data: JSON.stringify(login_form),
+        data: JSON.stringify(state.login_form),
         success: (resp) => {
           let new_state = _.assign({}, state, {session: resp.data});
-          console.log(new_state)
           return new_state;
         }
       });
@@ -80,13 +79,20 @@ const reducer = (state=initialState, action) => {
           return state;
         }
       });
+    case "NEWSAPI_SEARCH":
+      $.ajax("/api/newsapi_search", {
+        method: "post",
+        dataType: "json",
+        contentType: "application/json; charset=UTF-8",
+        data: JSON.stringify({
+          search_phrase: state.search_bar
+        }),
+        success: (resp) => {
+          let new_state = _.assign({}, state, { search_results: resp.data.sr });
+          return new_state;
+        }
+      })
     default:
       return state;
   }
 }
-
-const rootReducer = combineReducers({
-  reducer
-});
-
-export default rootReducer

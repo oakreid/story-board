@@ -31,5 +31,7 @@ defmodule StoryBoardWeb.Router do
 
     post "/login", UserController, :login
     post "/register", UserController, :create
+
+    post "/newsapi_search", NewsAPIController, :newsapi_search
   end
 end
