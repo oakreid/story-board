@@ -27,8 +27,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {login} from '../redux/actions';
+import {login, register} from '../redux/actions';
 import {connect} from 'react-redux';
+import Form from './form'
 
 const styles = theme => ({
   root: {
@@ -107,56 +108,31 @@ class Header extends React.Component {
       anchorEl: null,
       mobileMoreAnchorEl: null,
       root: props.root,
-      open: false
+      loginOpen: false,
+      registerOpen: false
     };
     this.username = "";
     this.password = "";
   }
 
-  handleClickOpen = () => {
-    this.setState({ open: true });
+  handleLoginOpen = () => {
+    this.setState({ loginOpen: true });
   };
 
-  handleClose = () => {
-    this.setState({ open: false });
+  handleLoginClose = () => {
+    this.setState({ loginOpen: false });
   };
 
-  handleProfileMenuOpen = event => {
-    this.setState({ anchorEl: event.currentTarget });
+  handleRegisterOpen = () => {
+    this.setState({ registerOpen: true });
   };
 
-  handleMenuClose = () => {
-    this.setState({ anchorEl: null });
-    this.handleMobileMenuClose();
+  handleRegisterClose = () => {
+    this.setState({ registerOpen: false });
   };
-
-  handleMobileMenuOpen = event => {
-    this.setState({ mobileMoreAnchorEl: event.currentTarget });
-  };
-
-  handleMobileMenuClose = () => {
-    this.setState({ mobileMoreAnchorEl: null });
-  };
-
-  onUsernameChange = (event) => {
-    this.username = event.target.value;
-  }
-
-  onPasswordChange = (event) => {
-    this.password = event.target.value;
-  }
-
-  onLogin = () => {
-    this.props.login(
-      {
-        username: this.username,
-        password: this.password
-      }
-    )
-  }
 
   render() {
-    const { anchorEl, mobileMoreAnchorEl } = this.state;
+    const { anchorEl, mobileMoreAnchorEl, loginOpen, registerOpen } = this.state;
     const { classes } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -271,47 +247,14 @@ class Header extends React.Component {
               />
             </div>
             <div className={classes.grow} />
-            <div className={classes.sectionDesktop} onClick={this.handleClickOpen}>
+            <div className={classes.sectionDesktop} onClick={this.handleLoginOpen}>
               <Button color="inherit">Login</Button>
             </div>
-            <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              To subscribe to this website, please enter your email address here. We will send
-              updates occasionally.
-            </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              onChange={(event) => this.onUsernameChange(event)}
-              label="Username"
-              fullWidth
-            />
-            <TextField
-              margin="dense"
-              onChange={(event) => this.onPasswordChange(event)}
-              label="Password"
-              type="password"
-              fullWidth
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={this.onLogin} color="primary">
-              Login
-            </Button>
-          </DialogActions>
-        </Dialog>
-            <div className={classes.sectionDesktop}>
+            <Form action={this.props.login} classes={classes} open={loginOpen} onClose={this.handleLoginClose} anchorEl={anchorEl} mobileMoreAnchorEl={mobileMoreAnchorEl}/>
+            <div className={classes.sectionDesktop} onClick={this.handleRegisterOpen}>
               <Button color="inherit">Register</Button>
             </div>
+            <Form action={this.props.register} classes={classes} open={registerOpen} onClose={this.handleRegisterClose} anchorEl={anchorEl} mobileMoreAnchorEl={mobileMoreAnchorEl}/>
           </Toolbar>
         </AppBar>
         {renderMenu}
@@ -332,7 +275,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    login: (login_form) => dispatch(login(login_form))
+    login: (login_form) => dispatch(login(login_form)),
+    register: (login_form) => dispatch(register(login_form))
   }
 }
 
@@ -340,6 +284,8 @@ Header.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
+Header = withStyles(styles)(Header);
+
 Header = connect(mapStateToProps, mapDispatchToProps)(Header);
 
-export default withStyles(styles)(Header);
+export default Header;
