@@ -7,6 +7,7 @@ import Header from "./components/header.jsx";
 import Favorites from "./components/favorites.jsx";
 import Home from "./components/home.jsx"
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import Chat from "/.components/chat.jsx"
 import {Provider, connect} from 'react-redux';
 import {createStore} from 'redux';
 import { login, logout, register, fcuf, favorite } from './redux/actions';
@@ -52,6 +53,9 @@ class Root extends React.Component {
         } />
         <Route path="/favorites" exact={true} render={ () =>
           <Favorites root={this} />
+        } />
+        <Route path="/chat" exact={true} render={ () =>
+          <Chat root={this} />
         } />
       </Router>
     </div>);
