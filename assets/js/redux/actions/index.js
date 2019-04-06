@@ -24,6 +24,20 @@ export const register = (login_form) => {
   })
 }};
 
+export const favorite = (article) => {
+  console.log(article);
+  return (dispatch, getState) => {
+    $.ajax("/api/favorite", {
+        method: "post",
+        dataType: "json",
+        contentType: "application/json; charset=UTF-8",
+        data: JSON.stringify(article),
+        success: (resp) => {
+          dispatch()
+        }
+      });
+}};
+
 export const logout = () => {
   return {
     type: "LOGOUT"
@@ -31,18 +45,18 @@ export const logout = () => {
 }
 
 export const fcuf = (session) => {
-  return {
-    type: "FCUF",
-    session
-  }
-}
-
-export const favorite = (session) => {
-  return {
-    type: "FAVORITE",
-    session
-  }
-}
+  const { user_id } = session;
+  return (dispatch, getState) => {
+    $.ajax("/api/fcuf_articles", {
+        method: "post",
+        dataType: "json",
+        contentType: "application/json; charset=UTF-8",
+        data: JSON.stringify({user_id}),
+        success: (resp) => {
+          dispatch(resolvedFCUF(session))
+        }
+      });
+}};
 
 export const unfavorite = () => {
   return {
@@ -78,5 +92,19 @@ const resolvedSearch = (search_results) => {
   return {
     type: "NEWSAPI_SEARCH",
     search_results
+  }
+}
+
+const resolvedFavorite = (session) => {
+  return {
+    type: "FAVORITE",
+    session
+  }
+}
+
+const resolvedFCUF = (session) => {
+  return {
+    type: "FCUF",
+    session
   }
 }

@@ -20,6 +20,9 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import {favorite} from '../redux/actions';
+import { bindActionCreators } from 'redux'
+import {connect} from 'react-redux';
 
 const styles = theme => ({
   card: {
@@ -54,6 +57,22 @@ class Article extends React.Component {
     this.setState(state => ({ expanded: !state.expanded }));
   };
 
+  handleFavorite = (article) => {
+    const {source, author, title, description, url, urlToImage} = article;
+    const { user_id } = this.props.session;
+    this.props.favorite({
+      article: {
+        source: source.name,
+        author,
+        title,
+        description,
+        url,
+        image: urlToImage,
+        user_id
+      }
+    });
+  }
+
   render() {
     const { classes, source, session } = this.props;
 
@@ -73,7 +92,7 @@ class Article extends React.Component {
           </Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="Add to favorites" disabled={!session}>
+          <IconButton aria-label="Add to favorites" onClick={() => this.handleFavorite(source)} disabled={!session}>
             <FavoriteIcon />
           </IconButton>
           <IconButton aria-label="Share">
@@ -94,8 +113,17 @@ class Article extends React.Component {
   }
 }
 
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({
+    favorite: (article) => favorite(article)
+  },
+  dispatch
+)};
+
 Article.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Article);
+Article = withStyles(styles)(Article);
+
+export default connect(null, mapDispatchToProps)(Article);

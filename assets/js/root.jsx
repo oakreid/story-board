@@ -30,6 +30,9 @@ class Root extends React.Component {
 
   render() {
     const {session, search_results} = this.props.reducer;
+    if (session) {
+      console.log(this.props.fcuf(session));
+    }
     return (<div>
       <Router>
         <Header props={this.props}/>
@@ -53,7 +56,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
     login: (login_form) => login(login_form),
-    register: (login_form) => register(login_form)
+    register: (login_form) => register(login_form),
+    fcuf: (session) => fcuf(session)
   },
   dispatch
 )};
