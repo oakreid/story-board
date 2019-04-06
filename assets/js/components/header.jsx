@@ -27,8 +27,10 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {login} from '../redux/actions';
+import {login, register, logout} from '../redux/actions';
+import { bindActionCreators } from 'redux'
 import {connect} from 'react-redux';
+import Form from './form'
 
 const styles = theme => ({
   root: {
@@ -106,57 +108,35 @@ class Header extends React.Component {
     this.state = {
       anchorEl: null,
       mobileMoreAnchorEl: null,
-      root: props.root,
-      open: false
+      loginOpen: false,
+      registerOpen: false
     };
     this.username = "";
     this.password = "";
   }
 
-  handleClickOpen = () => {
-    this.setState({ open: true });
+  handleLoginOpen = () => {
+    this.setState({ loginOpen: true });
   };
 
-  handleClose = () => {
-    this.setState({ open: false });
+  handleLoginClose = () => {
+    this.setState({ loginOpen: false });
   };
 
-  handleProfileMenuOpen = event => {
-    this.setState({ anchorEl: event.currentTarget });
+  handleRegisterOpen = () => {
+    this.setState({ registerOpen: true });
   };
 
-  handleMenuClose = () => {
-    this.setState({ anchorEl: null });
-    this.handleMobileMenuClose();
+  handleRegisterClose = () => {
+    this.setState({ registerOpen: false });
   };
 
-  handleMobileMenuOpen = event => {
-    this.setState({ mobileMoreAnchorEl: event.currentTarget });
-  };
-
-  handleMobileMenuClose = () => {
-    this.setState({ mobileMoreAnchorEl: null });
-  };
-
-  onUsernameChange = (event) => {
-    this.username = event.target.value;
-  }
-
-  onPasswordChange = (event) => {
-    this.password = event.target.value;
-  }
-
-  onLogin = () => {
-    this.props.login(
-      {
-        username: this.username,
-        password: this.password
-      }
-    )
+  handleLogout = () => {
+    this.props.logout();
   }
 
   render() {
-    const { anchorEl, mobileMoreAnchorEl } = this.state;
+    const { anchorEl, mobileMoreAnchorEl, loginOpen, registerOpen } = this.state;
     const { classes } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -208,24 +188,24 @@ class Header extends React.Component {
     );
     let session_info;
     let favorites;
-    if (this.state.root.state.session == null) {
-      session_info = (<div className="form-inline my-2">
-        <input type="text" placeholder="username"
-          onChange={(ev) => root.update_login_form({username: ev.target.value})} />
-        <input type="password" placeholder="password"
-          onChange={(ev) => root.update_login_form({password: ev.target.value})} />
-        <button className="btn btn-secondary" onClick={() => root.login()}>Login</button>
-        <button className="btn btn-secondary" onClick={() => root.register()}>Register</button>
-      </div>);
-      favorites = (<p></p>);
-    } else {
-      session_info = (<div className="my-2">
-        <p className="text-success">Logged in as: {root.state.login_form.username}</p>
-        <p className="text-success">My ID: {root.state.session.user_id}</p>
-        <button className="btn btn-secondary" onClick={() => root.logout()}>Logout</button>
-      </div>);
-      favorites = (<p><Link to={"/favorites"} onClick={() => root.fetch_current_user_favorites()}>My Favorites</Link></p>);
-    }
+    // if (this.state.root.state.session == null) {
+    //   session_info = (<div className="form-inline my-2">
+    //     <input type="text" placeholder="username"
+    //       onChange={(ev) => root.update_login_form({username: ev.target.value})} />
+    //     <input type="password" placeholder="password"
+    //       onChange={(ev) => root.update_login_form({password: ev.target.value})} />
+    //     <button className="btn btn-secondary" onClick={() => root.login()}>Login</button>
+    //     <button className="btn btn-secondary" onClick={() => root.register()}>Register</button>
+    //   </div>);
+    //   favorites = (<p></p>);
+    // } else {
+    //   session_info = (<div className="my-2">
+    //     <p className="text-success">Logged in as: {root.state.login_form.username}</p>
+    //     <p className="text-success">My ID: {root.state.session.user_id}</p>
+    //     <button className="btn btn-secondary" onClick={() => root.logout()}>Logout</button>
+    //   </div>);
+    //   favorites = (<p><Link to={"/favorites"} onClick={() => root.fetch_current_user_favorites()}>My Favorites</Link></p>);
+    // }
 
     // return (<div>
     //   <div className="row my-2 bg-dark">
@@ -270,47 +250,29 @@ class Header extends React.Component {
                 }}
               />
             </div>
-            <div className={classes.grow} />
-            <div className={classes.sectionDesktop} onClick={this.handleClickOpen}>
-              <Button color="inherit">Login</Button>
-            </div>
-            <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              To subscribe to this website, please enter your email address here. We will send
-              updates occasionally.
-            </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              onChange={(event) => this.onUsernameChange(event)}
-              label="Username"
-              fullWidth
-            />
-            <TextField
-              margin="dense"
-              onChange={(event) => this.onPasswordChange(event)}
-              label="Password"
-              type="password"
-              fullWidth
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={this.onLogin} color="primary">
-              Login
-            </Button>
-          </DialogActions>
-        </Dialog>
+            <div className={classes.grow}/>
             <div className={classes.sectionDesktop}>
-              <Button color="inherit">Register</Button>
+            { this.props.reducer.session ? (
+              <div>
+                <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+                  {'Logged in as ' + this.props.reducer.username}
+                </Typography>
+                <div className={classes.sectionDesktop} onClick={this.handleLogout}>
+                  <Button color="inherit">Logout</Button>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <div className={classes.sectionDesktop} onClick={this.handleLoginOpen}>
+                  <Button color="inherit">Login</Button>
+                </div>
+                <Form action={this.props.login} classes={classes} open={loginOpen} onClose={this.handleLoginClose} anchorEl={anchorEl} mobileMoreAnchorEl={mobileMoreAnchorEl}/>
+                <div className={classes.sectionDesktop} onClick={this.handleRegisterOpen}>
+                  <Button color="inherit">Register</Button>
+                </div>
+                <Form action={this.props.register} classes={classes} open={registerOpen} onClose={this.handleRegisterClose} anchorEl={anchorEl} mobileMoreAnchorEl={mobileMoreAnchorEl}/>
+              </div>
+            )}
             </div>
           </Toolbar>
         </AppBar>
@@ -321,20 +283,20 @@ class Header extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    login_form: state.login_form,
-    session: state.session,
-    current_user_favorites: state.current_user_favorites,
-    search_bar: state.search
-  }
-};
+const mapStateToProps = state => ({
+  ...state
+});
 
 const mapDispatchToProps = dispatch => {
-  return {
-    login: (login_form) => dispatch(login(login_form))
-  }
-}
+  return bindActionCreators({
+    login: (login_form) => login(login_form),
+    logout,
+    register: (login_form) => register(login_form)
+  },
+  dispatch
+)};
+
+Header = withStyles(styles)(Header);
 
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
@@ -342,4 +304,4 @@ Header.propTypes = {
 
 Header = connect(mapStateToProps, mapDispatchToProps)(Header);
 
-export default withStyles(styles)(Header);
+export default Header;
