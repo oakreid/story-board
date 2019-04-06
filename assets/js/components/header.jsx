@@ -250,17 +250,19 @@ class Header extends React.Component {
                 }}
               />
             </div>
+            <div className={classes.grow}/>
+            <div className={classes.sectionDesktop}>
             { this.props.reducer.session ? (
-              <div className={classes.grow}>
+              <div>
                 <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-                  {'Logged in as ' + this.props.reducer.session.user_id}
+                  {'Logged in as ' + this.props.reducer.username}
                 </Typography>
                 <div className={classes.sectionDesktop} onClick={this.handleLogout}>
                   <Button color="inherit">Logout</Button>
                 </div>
               </div>
             ) : (
-              <div className={classes.grow}>
+              <div>
                 <div className={classes.sectionDesktop} onClick={this.handleLoginOpen}>
                   <Button color="inherit">Login</Button>
                 </div>
@@ -271,6 +273,7 @@ class Header extends React.Component {
                 <Form action={this.props.register} classes={classes} open={registerOpen} onClose={this.handleRegisterClose} anchorEl={anchorEl} mobileMoreAnchorEl={mobileMoreAnchorEl}/>
               </div>
             )}
+            </div>
           </Toolbar>
         </AppBar>
         {renderMenu}
@@ -294,6 +297,10 @@ const mapDispatchToProps = dispatch => {
 )};
 
 Header = withStyles(styles)(Header);
+
+Header.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
 Header = connect(mapStateToProps, mapDispatchToProps)(Header);
 

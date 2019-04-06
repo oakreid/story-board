@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import _ from 'lodash';
 
 const initialState = {
-  login_form: {username: "", password: ""},
+  username: "",
   session: null,
   current_user_favorites: [],
   search_bar: "",
@@ -10,20 +10,16 @@ const initialState = {
 }
 
 const reducer = (state=initialState, action) => {
-  const { session } = action;
+  const { session, username } = action;
   switch(action.type) {
     case "LOGIN":
       return {
         ...state,
-        session
+        session,
+        username
       }
     case "LOGOUT":
-      return initialState;
-    case "REGISTER":
-      return {
-        ...state,
-        session
-      }
+      return initialState
     // case "FCUF":
     //   $.ajax("/api/fcuf_articles", {
     //     method: "post",

@@ -6,7 +6,7 @@ export const login = (login_form) => {
       contentType: "application/json; charset=UTF-8",
       data: JSON.stringify(login_form),
       success: (resp) => {
-        dispatch(resolvedLogin(resp.data))
+        dispatch(resolvedLogin(resp.data, login_form.username))
     }
   })
 }};
@@ -24,10 +24,11 @@ export const register = (login_form) => {
   })
 }};
 
-export const resolvedLogin = (session) => {
+export const resolvedLogin = (session, username) => {
   return {
     type: "LOGIN",
-    session
+    session,
+    username
   }
 }
 
