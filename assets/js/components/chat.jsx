@@ -13,8 +13,7 @@ class Chat extends React.Component {
     }
 
     this.channel.on("other_submit", payload => {
-      let new_state = _.assign({}, state, {chat: payload});
-      this.props.setState(new_state);
+      this.setState(payload);
     });
 
     this.channel.join().receive("ok", this.set_chat_view.bind(this));
@@ -33,7 +32,8 @@ class Chat extends React.Component {
 
   buildChat() {
     return this.state.chat.map(function(message) {
-      return (<p>{message}</p>);
+      let key = "" + _.random(99999999999999999999999999);
+      return (<p key={key}>{message}</p>);
     });
   }
 
