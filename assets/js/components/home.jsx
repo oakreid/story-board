@@ -12,7 +12,7 @@ class Home extends React.Component {
   render() {
     let {root} = this.props;
     return (<div>
-      <p>This is the home page</p>
+      <Link to={"/chat"}>Goto chat</Link>
     </div>);
   }
 }

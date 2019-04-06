@@ -8,29 +8,38 @@ class Chat extends React.Component {
   constructor(props) {
     super(props);
     this.channel = props.channel;
+    this.state = {
+      chat: []
+    }
+
     this.channel.on("other_submit", payload => {
       let new_state = _.assign({}, state, {chat: payload});
-      this.props.root.setState(new_state);
+      this.props.setState(new_state);
     });
 
-    submit() {
-      this.channel.push("submit", {message: document.getElementById('chatsubmit')})
-      .receive("ok", this.set_chat_view.bind(this));
-
     this.channel.join().receive("ok", this.set_chat_view.bind(this));
-    }
+  }
+
+  submit() {
+    let cs = $("#chatsubmit").val();
+    this.channel.push("submit", {message: {value: cs}}).receive("ok", this.set_chat_view.bind(this));
   }
 
   set_chat_view(view) {
-    new_state = _.assign({}, this.props.root.state, {chat:, view});
-    this.props.root.setState(new_state);
+    let { chat } = view;
+    let new_state = _.assign({}, this.state, {chat: chat});
+    this.setState(new_state);
   }
 
   render() {
     let {root} = this.props;
+    let chatlog = ();
     return (<div id="chatMain">
       <input type="text" id="chatsubmit"/><button onClick={() => this.submit()}>Push Me</button>
-      <p id="chatlog">This is the chat page</p>
+      <p>This is the chat page</p>
+      <div id="chatlog">
+        {chat_log}
+      </div>
     </div>);
   }
 }

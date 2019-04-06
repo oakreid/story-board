@@ -1,26 +1,19 @@
-defmodule PhrasesWithPhriends.BackupAgent do
+defmodule StoryBoard.BackupAgent do
   use Agent
 
   def start_link(_args) do
-    Agent.start_link(fn -> [] end, name: __MODULE__)
+    Agent.start_link(fn -> %{} end, name: __MODULE__)
   end
 
-  def push(message) do
+  def put(name, val) do
     Agent.update __MODULE__, fn state ->
-      max_chat_cache = 100
-      inserted = List.insert_at(state, 0, message)
-      if length(state) > max_chat_cache do
-        List.delete_at(inserted, max_chat_cache)
-      else
-        inserted
-      end
-
+      Map.put(state, name, val)
     end
   end
 
-  def get() do
+  def get(name) do
     Agent.get __MODULE__, fn state ->
-      state
+      Map.get(state, name)
     end
   end
 end

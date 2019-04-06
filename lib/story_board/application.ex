@@ -12,7 +12,7 @@ defmodule StoryBoard.Application do
       StoryBoard.Repo,
       # Start the endpoint when the application starts
       StoryBoardWeb.Endpoint,
-      PhrasesWithPhriends.BackupAgent
+      StoryBoard.BackupAgent
       # Starts a worker by calling: StoryBoard.Worker.start_link(arg)
       # {StoryBoard.Worker, arg},
     ]

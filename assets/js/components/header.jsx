@@ -296,11 +296,12 @@ const mapDispatchToProps = dispatch => {
   dispatch
 )};
 
-Header = withStyles(styles)(Header);
-
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
 };
+
+Header = withStyles(styles)(Header);
+
 
 Header = connect(mapStateToProps, mapDispatchToProps)(Header);
 

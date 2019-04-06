@@ -8,7 +8,7 @@ import Header from "./components/header.jsx";
 import Favorites from "./components/favorites.jsx";
 import Home from "./components/home.jsx"
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
-import Chat from "/.components/chat.jsx"
+import Chat from "./components/chat.jsx"
 import {Provider, connect} from 'react-redux';
 import {createStore, bindActionCreators, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
@@ -27,6 +27,7 @@ export default function root_init(node, channel) {
 class Root extends React.Component {
   constructor(props) {
     super(props);
+    this.channel = props.channel;
   }
 
   // update_login_form(data) {
