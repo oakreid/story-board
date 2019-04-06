@@ -56,9 +56,16 @@ defmodule StoryBoard.Articles do
 
   """
   def create_article(attrs \\ %{}) do
-    %Article{}
-    |> Article.changeset(attrs)
-    |> Repo.insert()
+    if Map.get(attrs, "author") == nil do
+      filtered_attrs = Map.put(attrs, "author", "unknown")
+      %Article{}
+      |> Article.changeset(filtered_attrs)
+      |> Repo.insert()
+    else
+      %Article{}
+      |> Article.changeset(attrs)
+      |> Repo.insert()
+    end
   end
 
   @doc """

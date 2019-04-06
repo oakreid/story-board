@@ -30,9 +30,9 @@ class Root extends React.Component {
 
   render() {
     const {session, search_results} = this.props.reducer;
-    if (session) {
+    /*if (session) {
       console.log(this.props.fcuf(session));
-    }
+    }*/
     return (<div>
       <Router>
         <Header props={this.props}/>
