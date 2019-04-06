@@ -31,9 +31,15 @@ class Chat extends React.Component {
     this.setState(new_state);
   }
 
+  buildChat() {
+    return this.state.chat.map(function(message) {
+      return (<p>{message}</p>);
+    });
+  }
+
   render() {
     let {root} = this.props;
-    let chatlog = ();
+    let chat_log = this.buildChat();
     return (<div id="chatMain">
       <input type="text" id="chatsubmit"/><button onClick={() => this.submit()}>Push Me</button>
       <p>This is the chat page</p>
