@@ -18,8 +18,7 @@ const reducer = (state=initialState, action) => {
         session
       }
     case "LOGOUT":
-      let new_state = _.assign({}, state, {session: null});
-      return new_state;
+      return initialState;
     case "REGISTER":
       return {
         ...state,

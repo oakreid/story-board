@@ -27,7 +27,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {login, register} from '../redux/actions';
+import {login, register, logout} from '../redux/actions';
 import { bindActionCreators } from 'redux'
 import {connect} from 'react-redux';
 import Form from './form'
@@ -130,6 +130,10 @@ class Header extends React.Component {
   handleRegisterClose = () => {
     this.setState({ registerOpen: false });
   };
+
+  handleLogout = () => {
+    this.props.logout();
+  }
 
   render() {
     const { anchorEl, mobileMoreAnchorEl, loginOpen, registerOpen } = this.state;
@@ -246,15 +250,27 @@ class Header extends React.Component {
                 }}
               />
             </div>
-            <div className={classes.grow} />
-            <div className={classes.sectionDesktop} onClick={this.handleLoginOpen}>
-              <Button color="inherit">Login</Button>
-            </div>
-            <Form action={this.props.login} classes={classes} open={loginOpen} onClose={this.handleLoginClose} anchorEl={anchorEl} mobileMoreAnchorEl={mobileMoreAnchorEl}/>
-            <div className={classes.sectionDesktop} onClick={this.handleRegisterOpen}>
-              <Button color="inherit">Register</Button>
-            </div>
-            <Form action={this.props.register} classes={classes} open={registerOpen} onClose={this.handleRegisterClose} anchorEl={anchorEl} mobileMoreAnchorEl={mobileMoreAnchorEl}/>
+            { this.props.reducer.session ? (
+              <div className={classes.grow}>
+                <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+                  {'Logged in as ' + this.props.reducer.session.user_id}
+                </Typography>
+                <div className={classes.sectionDesktop} onClick={this.handleLogout}>
+                  <Button color="inherit">Logout</Button>
+                </div>
+              </div>
+            ) : (
+              <div className={classes.grow}>
+                <div className={classes.sectionDesktop} onClick={this.handleLoginOpen}>
+                  <Button color="inherit">Login</Button>
+                </div>
+                <Form action={this.props.login} classes={classes} open={loginOpen} onClose={this.handleLoginClose} anchorEl={anchorEl} mobileMoreAnchorEl={mobileMoreAnchorEl}/>
+                <div className={classes.sectionDesktop} onClick={this.handleRegisterOpen}>
+                  <Button color="inherit">Register</Button>
+                </div>
+                <Form action={this.props.register} classes={classes} open={registerOpen} onClose={this.handleRegisterClose} anchorEl={anchorEl} mobileMoreAnchorEl={mobileMoreAnchorEl}/>
+              </div>
+            )}
           </Toolbar>
         </AppBar>
         {renderMenu}
@@ -271,6 +287,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
     login: (login_form) => login(login_form),
+    logout,
     register: (login_form) => register(login_form)
   },
   dispatch
