@@ -7,6 +7,13 @@ defmodule PhrasesWithPhriends.BackupAgent do
 
   def push(message) do
     Agent.update __MODULE__, fn state ->
+      max_chat_cache = 100
+      inserted = List.insert_at(state, 0, message)
+      if length(state) > max_chat_cache do
+        List.delete_at(inserted, max_chat_cache)
+      else
+        inserted
+      end
 
     end
   end

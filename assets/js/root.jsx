@@ -15,21 +15,23 @@ import rootReducer from './redux/reducers';
 
 const store = createStore(rootReducer);
 
-export default function root_init(node) {
+export default function root_init(node, channel) {
   ReactDOM.render(
     <Provider store={store}>
-      <Root />
+      <Root channel={channel} />
     </Provider>, node);
 }
 
 class Root extends React.Component {
   constructor(props) {
     super(props);
+    this.channel = props.channel;
     this.state = {
       login_form: {username: "", password: ""},
       session: null,
       current_user_favorites: [],
-      search_bar: ""
+      search_bar: "",
+      chat: []
     }
   }
 
@@ -55,7 +57,7 @@ class Root extends React.Component {
           <Favorites root={this} />
         } />
         <Route path="/chat" exact={true} render={ () =>
-          <Chat root={this} />
+          <Chat root={this} channel={this.channel} />
         } />
       </Router>
     </div>);
