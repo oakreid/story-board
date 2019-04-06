@@ -28,23 +28,13 @@ class Root extends React.Component {
     super(props);
   }
 
-  // update_login_form(data) {
-  //   let new_form = _.assign({}, this.state.login_form, data);
-  //   let new_state = _.assign({}, this.state, {login_form: new_form});
-  //   this.setState(new_state);
-  // }
-  //
-  // update_search_bar(data) {
-  //   let new_state = _.assign({}, this.state, {search_bar: data});
-  //   this.setState(new_state);
-  // }
-
   render() {
+    const {session, search_results} = this.props.reducer;
     return (<div>
       <Router>
         <Header props={this.props}/>
         <Route path="/" exact={true} render={ () =>
-          <Home />
+          <Home search_results={search_results} session={session} />
         } />
         <Route path="/favorites" exact={true} render={ () =>
           <Favorites />

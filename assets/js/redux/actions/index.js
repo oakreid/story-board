@@ -24,24 +24,9 @@ export const register = (login_form) => {
   })
 }};
 
-export const resolvedLogin = (session, username) => {
-  return {
-    type: "LOGIN",
-    session,
-    username
-  }
-}
-
 export const logout = () => {
   return {
     type: "LOGOUT"
-  }
-}
-
-export const resolvedRegister = (login_form) => {
-  return {
-    type: "REGISTER",
-    login_form
   }
 }
 
@@ -66,8 +51,32 @@ export const unfavorite = () => {
 }
 
 export const newsapi_search = (search_bar) => {
+  return (dispatch, getState) => {
+    $.ajax("/api/newsapi_search", {
+        method: "post",
+        dataType: "json",
+        contentType: "application/json; charset=UTF-8",
+        data: JSON.stringify({
+          search_phrase: search_bar
+        }),
+        success: (resp) => {
+          dispatch(resolvedSearch(resp.data.sr))
+        }
+      })
+    }
+}
+
+const resolvedLogin = (session, username) => {
+  return {
+    type: "LOGIN",
+    session,
+    username
+  }
+}
+
+const resolvedSearch = (search_results) => {
   return {
     type: "NEWSAPI_SEARCH",
-    search_bar
+    search_results
   }
 }

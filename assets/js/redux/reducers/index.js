@@ -10,7 +10,7 @@ const initialState = {
 }
 
 const reducer = (state=initialState, action) => {
-  const { session, username } = action;
+  const { session, username, search_results } = action;
   switch(action.type) {
     case "LOGIN":
       return {
@@ -19,7 +19,10 @@ const reducer = (state=initialState, action) => {
         username
       }
     case "LOGOUT":
-      return initialState
+      return {
+        ...initialState,
+        search_results: state.search_results
+      }
     // case "FCUF":
     //   $.ajax("/api/fcuf_articles", {
     //     method: "post",
@@ -63,19 +66,11 @@ const reducer = (state=initialState, action) => {
     //       return state;
     //     }
     //   });
-    // case "NEWSAPI_SEARCH":
-    //   $.ajax("/api/newsapi_search", {
-    //     method: "post",
-    //     dataType: "json",
-    //     contentType: "application/json; charset=UTF-8",
-    //     data: JSON.stringify({
-    //       search_phrase: state.search_bar
-    //     }),
-    //     success: (resp) => {
-    //       let new_state = _.assign({}, state, { search_results: resp.data.sr });
-    //       return new_state;
-    //     }
-    //   })
+    case "NEWSAPI_SEARCH":
+      return {
+        ...state,
+        search_results
+      }
     default:
       return state;
   }
