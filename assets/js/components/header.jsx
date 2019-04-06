@@ -28,6 +28,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {login, register} from '../redux/actions';
+import { bindActionCreators } from 'redux'
 import {connect} from 'react-redux';
 import Form from './form'
 
@@ -104,10 +105,10 @@ const styles = theme => ({
 class Header extends React.Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       anchorEl: null,
       mobileMoreAnchorEl: null,
-      root: props.root,
       loginOpen: false,
       registerOpen: false
     };
@@ -184,24 +185,24 @@ class Header extends React.Component {
     );
     let session_info;
     let favorites;
-    if (this.state.root.state.session == null) {
-      session_info = (<div className="form-inline my-2">
-        <input type="text" placeholder="username"
-          onChange={(ev) => root.update_login_form({username: ev.target.value})} />
-        <input type="password" placeholder="password"
-          onChange={(ev) => root.update_login_form({password: ev.target.value})} />
-        <button className="btn btn-secondary" onClick={() => root.login()}>Login</button>
-        <button className="btn btn-secondary" onClick={() => root.register()}>Register</button>
-      </div>);
-      favorites = (<p></p>);
-    } else {
-      session_info = (<div className="my-2">
-        <p className="text-success">Logged in as: {root.state.login_form.username}</p>
-        <p className="text-success">My ID: {root.state.session.user_id}</p>
-        <button className="btn btn-secondary" onClick={() => root.logout()}>Logout</button>
-      </div>);
-      favorites = (<p><Link to={"/favorites"} onClick={() => root.fetch_current_user_favorites()}>My Favorites</Link></p>);
-    }
+    // if (this.state.root.state.session == null) {
+    //   session_info = (<div className="form-inline my-2">
+    //     <input type="text" placeholder="username"
+    //       onChange={(ev) => root.update_login_form({username: ev.target.value})} />
+    //     <input type="password" placeholder="password"
+    //       onChange={(ev) => root.update_login_form({password: ev.target.value})} />
+    //     <button className="btn btn-secondary" onClick={() => root.login()}>Login</button>
+    //     <button className="btn btn-secondary" onClick={() => root.register()}>Register</button>
+    //   </div>);
+    //   favorites = (<p></p>);
+    // } else {
+    //   session_info = (<div className="my-2">
+    //     <p className="text-success">Logged in as: {root.state.login_form.username}</p>
+    //     <p className="text-success">My ID: {root.state.session.user_id}</p>
+    //     <button className="btn btn-secondary" onClick={() => root.logout()}>Logout</button>
+    //   </div>);
+    //   favorites = (<p><Link to={"/favorites"} onClick={() => root.fetch_current_user_favorites()}>My Favorites</Link></p>);
+    // }
 
     // return (<div>
     //   <div className="row my-2 bg-dark">
@@ -224,6 +225,7 @@ class Header extends React.Component {
     //     <button className="btn btn-secondary">Go</button>
     //   </div>
     // </div>);
+    console.log(this.props);
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -264,25 +266,18 @@ class Header extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    login_form: state.login_form,
-    session: state.session,
-    current_user_favorites: state.current_user_favorites,
-    search_bar: state.search
-  }
-};
+const mapStateToProps = state => ({
+  ...state
+});
 
 const mapDispatchToProps = dispatch => {
-  return {
-    login: (login_form) => dispatch(login(login_form)),
-    register: (login_form) => dispatch(register(login_form))
-  }
-}
-
-Header.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+  console.log('dispatch', dispatch);
+  return bindActionCreators({
+    login: (login_form) => login(login_form),
+    register: (login_form) => register(login_form)
+  },
+  dispatch
+)};
 
 Header = withStyles(styles)(Header);
 

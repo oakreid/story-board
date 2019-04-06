@@ -1,7 +1,33 @@
 export const login = (login_form) => {
+  return (dispatch, getState) => {
+    $.ajax("/api/login", {
+      method: "post",
+      dataType: "json",
+      contentType: "application/json; charset=UTF-8",
+      data: JSON.stringify(login_form),
+      success: (resp) => {
+        dispatch(resolvedLogin(resp.data))
+    }
+  })
+}};
+
+export const register = (login_form) => {
+  return (dispatch, getState) => {
+  $.ajax("/api/register", {
+    method: "post",
+    dataType: "json",
+    contentType: "application/json; charset=UTF-8",
+    data: JSON.stringify(login_form),
+    success: (resp) => {
+      dispatch(login(login_form))
+    }
+  })
+}};
+
+export const resolvedLogin = (session) => {
   return {
     type: "LOGIN",
-    login_form
+    session
   }
 }
 
@@ -11,7 +37,7 @@ export const logout = () => {
   }
 }
 
-export const register = (login_form) => {
+export const resolvedRegister = (login_form) => {
   return {
     type: "REGISTER",
     login_form
