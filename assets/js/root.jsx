@@ -28,11 +28,12 @@ class Root extends React.Component {
     super(props);
   }
 
+  componentDidUpdate() {
+    this.props.fcuf(this.props.reducer.session);
+  }
+
   render() {
-    const {session, search_results} = this.props.reducer;
-    /*if (session) {
-      console.log(this.props.fcuf(session));
-    }*/
+    const { search_results, session } = this.props.reducer;
     return (<div>
       <Router>
         <Header props={this.props}/>
