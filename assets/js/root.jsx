@@ -16,8 +16,6 @@ import rootReducer from './redux/reducers';
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
-const unsubscribe = store.subscribe(() => console.log(store.getState()))
-
 export default function root_init(node) {
   ReactDOM.render(
     <Provider store={store}>
@@ -57,7 +55,6 @@ class Root extends React.Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state)
   return {
     ...state
   };

@@ -105,7 +105,6 @@ const styles = theme => ({
 class Header extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       anchorEl: null,
       mobileMoreAnchorEl: null,
@@ -225,7 +224,6 @@ class Header extends React.Component {
     //     <button className="btn btn-secondary">Go</button>
     //   </div>
     // </div>);
-    console.log(this.props);
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -271,7 +269,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => {
-  console.log('dispatch', dispatch);
   return bindActionCreators({
     login: (login_form) => login(login_form),
     register: (login_form) => register(login_form)
