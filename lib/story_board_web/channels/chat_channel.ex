@@ -12,7 +12,7 @@ defmodule StoryBoardWeb.ChatChannel do
   end
 
   def handle_in("submit", payload, socket) do
-    chat = StoryBoard.Chat.push(StoryBoard.BackupAgent.get("lobby"), payload["message"]["value"])
+    chat = StoryBoard.Chat.push(StoryBoard.BackupAgent.get("lobby"), payload["message"])
     StoryBoard.BackupAgent.put("lobby", chat)
     broadcast_from(socket, "other_submit", chat)
     {:reply, {:ok, chat}, socket}

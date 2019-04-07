@@ -52,7 +52,7 @@ class Root extends React.Component {
           <Favorites />
         } />
         <Route path="/chat" exact={true} render={ () =>
-          <Chat root={this} channel={this.channel} />
+          <Chat session={this.props.reducer.session} channel={this.channel} />
         } />
       </Router>
     </div>);
