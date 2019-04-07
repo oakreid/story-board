@@ -57,7 +57,7 @@ class Article extends React.Component {
     this.setState(state => ({ expanded: !state.expanded }));
   };
 
-  handleFavorite = (article) => {
+  handleFavorite = (article, session) => {
     const {source, author, title, description, url, urlToImage} = article;
     const { user_id } = this.props.session;
     this.props.favorite({
@@ -70,7 +70,7 @@ class Article extends React.Component {
         image: urlToImage,
         user_id
       }
-    });
+    }, session);
   }
 
   render() {
@@ -92,7 +92,7 @@ class Article extends React.Component {
           </Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="Add to favorites" onClick={() => this.handleFavorite(source)} disabled={!session}>
+          <IconButton aria-label="Add to favorites" onClick={() => this.handleFavorite(source, session)} disabled={!session}>
             <FavoriteIcon />
           </IconButton>
           <IconButton aria-label="Share">
@@ -115,7 +115,7 @@ class Article extends React.Component {
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-    favorite: (article) => favorite(article)
+    favorite: (article, session) => favorite(article, session)
   },
   dispatch
 )};

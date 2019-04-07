@@ -28,8 +28,6 @@ const reducer = (state=initialState, action) => {
         ...state,
         current_user_favorites
       }
-    case "FAVORITE":
-      return state
     // case "UNFAVORITE":
     //   $.ajax("/api/unfavorite", {
     //     method: "post",

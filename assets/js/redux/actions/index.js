@@ -24,8 +24,7 @@ export const register = (login_form) => {
   })
 }};
 
-export const favorite = (article) => {
-  console.log(article);
+export const favorite = (article, session) => {
   return (dispatch, getState) => {
     $.ajax("/api/favorite", {
         method: "post",
@@ -33,7 +32,7 @@ export const favorite = (article) => {
         contentType: "application/json; charset=UTF-8",
         data: JSON.stringify(article),
         success: (resp) => {
-          dispatch()
+          dispatch(fcuf(session))
         }
       });
 }};
@@ -53,7 +52,8 @@ export const fcuf = (session) => {
         contentType: "application/json; charset=UTF-8",
         data: JSON.stringify({user_id}),
         success: (resp) => {
-          dispatch(resolvedFCUF(session))
+          console.log(resp.data.sr)
+          dispatch(resolvedFCUF(resp.data.sr))
         }
       });
 }};
@@ -95,16 +95,9 @@ const resolvedSearch = (search_results) => {
   }
 }
 
-const resolvedFavorite = (session) => {
-  return {
-    type: "FAVORITE",
-    session
-  }
-}
-
-const resolvedFCUF = (session) => {
+const resolvedFCUF = (current_user_favorites) => {
   return {
     type: "FCUF",
-    session
+    current_user_favorites
   }
 }
