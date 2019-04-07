@@ -20,9 +20,12 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Menu from '@material-ui/core/Menu';
 import {favorite, unfavorite} from '../redux/actions';
 import { bindActionCreators } from 'redux'
 import {connect} from 'react-redux';
+import Share from './share';
+
 
 const styles = theme => ({
   card: {
@@ -52,6 +55,21 @@ const styles = theme => ({
 
 class Article extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      anchorEl: null
+    }
+  }
+
+  handleShareMenuOpen = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
+  handleMenuClose = () => {
+    this.setState({ anchorEl: null });
+  };
+
   handleClick = (article) => {
     const { session, username } = this.props;
     const {id, source, author, title, description, url, urlToImage, publishedAt} = article;
@@ -75,8 +93,22 @@ class Article extends React.Component {
 
   render() {
     const { classes, source, session, username } = this.props;
+    const { anchorEl } = this.state;
+    const isMenuOpen = Boolean(anchorEl);
+    const renderMenu = (
+      <Menu
+        anchorEl={anchorEl}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={isMenuOpen}
+        onClose={this.handleMenuClose}
+      >
+        <Share shareUrl={source.url} title={source.title}/>
+      </Menu>
+    );
 
     return (
+      <div>
       <Card className={classes.card}>
         <CardHeader
           title={source.title}
@@ -95,11 +127,13 @@ class Article extends React.Component {
           <IconButton aria-label="Add to favorites" onClick={() => this.handleClick(source, session)} disabled={!session}>
             <FavoriteIcon />
           </IconButton>
-          <IconButton aria-label="Share">
+          <IconButton aria-label="Share" onClick={(event) => this.handleShareMenuOpen(event)}>
             <ShareIcon />
           </IconButton>
         </CardActions>
       </Card>
+      {renderMenu}
+      </div>
     );
   }
 }

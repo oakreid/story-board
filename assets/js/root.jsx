@@ -35,7 +35,7 @@ class Root extends React.Component {
     return (<div>
       <Router>
         <Header props={this.props}/>
-        <Route path="/" exact={true} render={ () =>
+        <Route path="/" render={ () =>
           <Home search_results={search_results} session={session} />
         } />
         <Route path="/favorites" exact={true} render={ () =>

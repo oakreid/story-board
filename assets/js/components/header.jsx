@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
 import $ from 'jquery';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link as RouterLink } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
@@ -27,21 +27,16 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import SearchBar from 'material-ui-search-bar';
 import {login, register, logout, newsapi_search} from '../redux/actions';
 import { bindActionCreators } from 'redux'
 import {connect} from 'react-redux';
-<<<<<<< HEAD
-import Form from './form';
-=======
 import Form from './form'
 import DOMPurify from 'dompurify';
 
->>>>>>> b1b78e390429c0ebcef3cf34c195108ef9067ae8
-
 const favesLink = props => <RouterLink to="/favorites" {...props} />
+const chatLink = props => <RouterLink to="/chat" {...props} />
 const homeLink = props => <RouterLink to="/" {...props} />
 
 const styles = theme => ({
@@ -181,15 +176,18 @@ class Header extends React.Component {
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={this.handleMenuClose}><div className={classes.sectionDesktop} onClick={this.handleLogout}>
-          <Button color="inherit">Logout</Button>
-        </div></MenuItem>
         <MenuItem onClick={this.handleMenuClose}><Link component={favesLink} className={classes.sectionDesktop}>
           <Button color="inherit">Favorites</Button>
+        </Link></MenuItem>
+        <MenuItem onClick={this.handleMenuClose}><Link component={chatLink} className={classes.sectionDesktop}>
+          <Button color="inherit">Chat</Button>
         </Link></MenuItem>
         <MenuItem onClick={this.handleMenuClose}><Link component={homeLink} className={classes.sectionDesktop}>
           <Button color="inherit">Home</Button>
         </Link></MenuItem>
+        <MenuItem onClick={this.handleMenuClose}><div className={classes.sectionDesktop} onClick={this.handleLogout}>
+          <Button color="inherit">Logout</Button>
+        </div></MenuItem>
       </Menu>
     );
 
