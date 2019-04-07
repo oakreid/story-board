@@ -11,7 +11,8 @@ defmodule StoryBoard.Application do
       # Start the Ecto repository
       StoryBoard.Repo,
       # Start the endpoint when the application starts
-      StoryBoardWeb.Endpoint
+      StoryBoardWeb.Endpoint,
+      StoryBoard.BackupAgent
       # Starts a worker by calling: StoryBoard.Worker.start_link(arg)
       # {StoryBoard.Worker, arg},
     ]
