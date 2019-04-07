@@ -58,11 +58,11 @@ class Article extends React.Component {
   };
 
   handleFavorite = (article, session) => {
-    const {source, author, title, description, url, urlToImage} = article;
+    const {name, author, title, description, url, urlToImage} = article;
     const { user_id } = this.props.session;
     this.props.favorite({
       article: {
-        source: source.name,
+        source: name,
         author,
         title,
         description,

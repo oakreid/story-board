@@ -25,6 +25,7 @@ export const register = (login_form) => {
 }};
 
 export const favorite = (article, session) => {
+  console.log(article, session)
   return (dispatch, getState) => {
     $.ajax("/api/favorite", {
         method: "post",
@@ -32,10 +33,12 @@ export const favorite = (article, session) => {
         contentType: "application/json; charset=UTF-8",
         data: JSON.stringify(article),
         success: (resp) => {
-          dispatch(fcuf(session))
+          console.log(resp.data)
+          dispatch(fcuf(session));
         }
       });
-}};
+    }
+  };
 
 export const logout = () => {
   return {
@@ -47,16 +50,19 @@ export const fcuf = (session) => {
   const { user_id } = session;
   return (dispatch, getState) => {
     $.ajax("/api/fcuf_articles", {
-        method: "post",
-        dataType: "json",
-        contentType: "application/json; charset=UTF-8",
-        data: JSON.stringify({user_id}),
-        success: (resp) => {
-          console.log(resp.data.sr)
-          dispatch(resolvedFCUF(resp.data.sr))
-        }
-      });
-}};
+      method: "post",
+      dataType: "json",
+      contentType: "application/json; charset=UTF-8",
+      data: JSON.stringify({user_id}),
+      success: (resp) => {
+        // console.log(resp.data.sr)
+        // dispatch(resolvedFCUF(resp.data.sr))
+        console.log(resp.data.cuf);
+        return resp.data.cuf
+      }
+    });
+  }
+};
 
 export const unfavorite = () => {
   return {

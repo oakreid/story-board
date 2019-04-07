@@ -11,7 +11,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import {Provider, connect} from 'react-redux';
 import {createStore, bindActionCreators, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
-import { login, logout, register, favorite } from './redux/actions';
+import { login, logout, register, favorite, fcuf } from './redux/actions';
 import rootReducer from './redux/reducers';
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
@@ -38,7 +38,7 @@ class Root extends React.Component {
           <Home search_results={search_results} session={session} />
         } />
         <Route path="/favorites" exact={true} render={ () =>
-          <Favorites />
+          <Favorites fcuf={() => this.props.fcuf(session)} />
         } />
       </Router>
     </div>);
@@ -54,7 +54,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
     login: (login_form) => login(login_form),
-    register: (login_form) => register(login_form)
+    register: (login_form) => register(login_form),
+    fcuf: (session) => fcuf(session)
   },
   dispatch
 )};

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
 import $ from 'jquery';
-import { Link, BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
@@ -27,11 +27,15 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
 import SearchBar from 'material-ui-search-bar';
 import {login, register, logout, newsapi_search} from '../redux/actions';
 import { bindActionCreators } from 'redux'
 import {connect} from 'react-redux';
 import Form from './form'
+
+const MyLink = props => <RouterLink to="/favorites" {...props} />
 
 const styles = theme => ({
   root: {
@@ -217,6 +221,9 @@ class Header extends React.Component {
                 <div className={classes.sectionDesktop} onClick={this.handleLogout}>
                   <Button color="inherit">Logout</Button>
                 </div>
+                <Link component={MyLink} className={classes.sectionDesktop}>
+                  <Button color="inherit">Favorites</Button>
+                </Link>
               </div>
             ) : (
               <div>
