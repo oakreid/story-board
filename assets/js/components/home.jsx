@@ -39,7 +39,7 @@ class Home extends React.Component {
           gridRef={grid => this.grid = grid}
         >
           {search_results.map((source, x) => (
-              <Article key={x} source={source} name={source.name} session={session}/>
+              <Article key={x} source={source} session={session}/>
           ))}
         </StackGrid>
     </div>);

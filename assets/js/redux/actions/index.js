@@ -6,7 +6,7 @@ export const login = (login_form) => {
       contentType: "application/json; charset=UTF-8",
       data: JSON.stringify(login_form),
       success: (resp) => {
-        dispatch(resolvedLogin(resp.data, login_form.username))
+        dispatch(fcuf(resp.data, login_form.username))
     }
   })
 }};
@@ -24,17 +24,32 @@ export const register = (login_form) => {
   })
 }};
 
-export const favorite = (article, session) => {
-  console.log(article, session)
+export const favorite = (article, session, username) => {
   return (dispatch, getState) => {
+    console.log(session)
     $.ajax("/api/favorite", {
         method: "post",
         dataType: "json",
         contentType: "application/json; charset=UTF-8",
         data: JSON.stringify(article),
         success: (resp) => {
-          console.log(resp.data)
-          dispatch(fcuf(session));
+          dispatch(fcuf(session, username))
+        }
+      });
+    }
+  };
+
+export const unfavorite = (article, session) => {
+  return (dispatch, getState) => {
+    $.ajax("/api/unfavorite", {
+        method: "post",
+        dataType: "json",
+        contentType: "application/json; charset=UTF-8",
+        data: JSON.stringify({
+          id: 1
+        }), // get the id of the article to unfavorite
+        success: (resp) => {
+          dispatch(fcuf(session, getState.username));
         }
       });
     }
@@ -46,7 +61,7 @@ export const logout = () => {
   }
 }
 
-export const fcuf = (session) => {
+const fcuf = (session, username) => {
   const { user_id } = session;
   return (dispatch, getState) => {
     $.ajax("/api/fcuf_articles", {
@@ -55,20 +70,11 @@ export const fcuf = (session) => {
       contentType: "application/json; charset=UTF-8",
       data: JSON.stringify({user_id}),
       success: (resp) => {
-        // console.log(resp.data.sr)
-        // dispatch(resolvedFCUF(resp.data.sr))
-        console.log(resp.data.cuf);
-        return resp.data.cuf
+        dispatch(resolvedFCUF(session, username, resp.data.cuf))
       }
     });
   }
 };
-
-export const unfavorite = () => {
-  return {
-    type: "UNFAVORITE"
-  }
-}
 
 export const newsapi_search = (search_bar) => {
   return (dispatch, getState) => {
@@ -86,14 +92,6 @@ export const newsapi_search = (search_bar) => {
     }
 }
 
-const resolvedLogin = (session, username) => {
-  return {
-    type: "LOGIN",
-    session,
-    username
-  }
-}
-
 const resolvedSearch = (search_results) => {
   return {
     type: "NEWSAPI_SEARCH",
@@ -101,9 +99,11 @@ const resolvedSearch = (search_results) => {
   }
 }
 
-const resolvedFCUF = (current_user_favorites) => {
+const resolvedFCUF = (session, username, current_user_favorites) => {
   return {
     type: "FCUF",
+    session,
+    username,
     current_user_favorites
   }
 }

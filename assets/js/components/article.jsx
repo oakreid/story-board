@@ -57,12 +57,13 @@ class Article extends React.Component {
     this.setState(state => ({ expanded: !state.expanded }));
   };
 
-  handleFavorite = (article, session) => {
-    const {source, author, title, description, url, urlToImage} = article;
-    const { user_id } = this.props.session;
+  handleFavorite = (article) => {
+    const { session, username } = this.props;
+    const {source, author, title, description, url, urlToImage, publishedAt} = article;
+    const { user_id } = session;
     this.props.favorite({
       article: {
-        source.name,
+        source: source.name,
         author,
         title,
         description,
@@ -71,11 +72,11 @@ class Article extends React.Component {
         user_id,
         publishedAt
       }
-    }, session);
+    }, session, username);
   }
 
   render() {
-    const { classes, source, session } = this.props;
+    const { classes, source, session, username } = this.props;
 
     return (
       <Card className={classes.card}>
@@ -114,9 +115,15 @@ class Article extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    ...state
+  };
+}
+
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-    favorite: (article, session) => favorite(article, session)
+    favorite: (article, session, username) => favorite(article, session, username)
   },
   dispatch
 )};
@@ -127,4 +134,4 @@ Article.propTypes = {
 
 Article = withStyles(styles)(Article);
 
-export default connect(null, mapDispatchToProps)(Article);
+export default connect(mapStateToProps, mapDispatchToProps)(Article);

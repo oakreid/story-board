@@ -26,16 +26,10 @@ import StackGrid from "react-stack-grid";
 class Favorites extends React.Component {
   constructor(props) {
     super(props);
-    this.favorites = []
-  }
-
-  componentDidMount() {
-    let {fcuf} = this.props;
-    this.favorites = fcuf() || [];
   }
 
   render() {
-    let {session} = this.props;
+    let {session, username, cuf} = this.props;
     return (<div>
       <StackGrid
           columnWidth={300}
@@ -44,8 +38,8 @@ class Favorites extends React.Component {
           monitorImagesLoaded={true}
           gridRef={grid => this.grid = grid}
         >
-          {this.favorites.map((source, x) => (
-              <Article key={x} source={source} name={source.source} session={session}/>
+          {cuf.map((source, x) => (
+              <Article key={x} source={source} username={username} session={session}/>
           ))}
         </StackGrid>
     </div>);

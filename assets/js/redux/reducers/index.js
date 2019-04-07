@@ -12,12 +12,6 @@ const initialState = {
 const reducer = (state=initialState, action) => {
   const { session, username, search_results, current_user_favorites } = action;
   switch(action.type) {
-    case "LOGIN":
-      return {
-        ...state,
-        session,
-        username
-      }
     case "LOGOUT":
       return {
         ...initialState,
@@ -26,20 +20,10 @@ const reducer = (state=initialState, action) => {
     case "FCUF":
       return {
         ...state,
+        session,
+        username,
         current_user_favorites
       }
-    // case "UNFAVORITE":
-    //   $.ajax("/api/unfavorite", {
-    //     method: "post",
-    //     dataType: "json",
-    //     contentType: "application/json; charset=UTF-8",
-    //     data: JSON.stringify({
-    //       id: 1
-    //     }), // get the id of the article to unfavorite
-    //     success: (resp) => {
-    //       return state;
-    //     }
-    //   });
     case "NEWSAPI_SEARCH":
       return {
         ...state,
