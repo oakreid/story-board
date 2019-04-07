@@ -26,7 +26,6 @@ export const register = (login_form) => {
 
 export const favorite = (article, session, username) => {
   return (dispatch, getState) => {
-    console.log(session)
     $.ajax("/api/favorite", {
         method: "post",
         dataType: "json",
@@ -39,17 +38,15 @@ export const favorite = (article, session, username) => {
     }
   };
 
-export const unfavorite = (article, session) => {
+export const unfavorite = (id, session, username) => {
   return (dispatch, getState) => {
     $.ajax("/api/unfavorite", {
         method: "post",
         dataType: "json",
         contentType: "application/json; charset=UTF-8",
-        data: JSON.stringify({
-          id: 1
-        }), // get the id of the article to unfavorite
+        data: JSON.stringify(id), // get the id of the article to unfavorite
         success: (resp) => {
-          dispatch(fcuf(session, getState.username));
+          dispatch(fcuf(session, username));
         }
       });
     }

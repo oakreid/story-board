@@ -9,7 +9,11 @@
     "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^3.0.2",
     "bootstrap": "^4.3.1",
+<<<<<<< HEAD
+    "history": "^4.9.0",
+=======
     "dompurify": "^1.0.10",
+>>>>>>> b1b78e390429c0ebcef3cf34c195108ef9067ae8
     "jquery": "^3.3.1",
     "lodash": "^4.17.11",
     "material-ui-icons": "^1.0.0-beta.36",

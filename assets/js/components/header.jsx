@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
 import $ from 'jquery';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
@@ -33,11 +33,16 @@ import SearchBar from 'material-ui-search-bar';
 import {login, register, logout, newsapi_search} from '../redux/actions';
 import { bindActionCreators } from 'redux'
 import {connect} from 'react-redux';
+<<<<<<< HEAD
+import Form from './form';
+=======
 import Form from './form'
 import DOMPurify from 'dompurify';
 
+>>>>>>> b1b78e390429c0ebcef3cf34c195108ef9067ae8
 
-const MyLink = props => <RouterLink to="/favorites" {...props} />
+const favesLink = props => <RouterLink to="/favorites" {...props} />
+const homeLink = props => <RouterLink to="/" {...props} />
 
 const styles = theme => ({
   root: {
@@ -96,13 +101,13 @@ const styles = theme => ({
     },
   },
   sectionDesktop: {
-    display: 'none',
+    display: 'flex',
     [theme.breakpoints.up('md')]: {
       display: 'flex',
     },
   },
   sectionMobile: {
-    display: 'flex',
+    display: 'none',
     [theme.breakpoints.up('md')]: {
       display: 'none',
     },
@@ -120,6 +125,23 @@ class Header extends React.Component {
     };
     this.searchText = "";
   }
+
+  handleProfileMenuOpen = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
+  handleMenuClose = () => {
+    this.setState({ anchorEl: null });
+    this.handleMobileMenuClose();
+  };
+
+  handleMobileMenuOpen = event => {
+    this.setState({ mobileMoreAnchorEl: event.currentTarget });
+  };
+
+  handleMobileMenuClose = () => {
+    this.setState({ mobileMoreAnchorEl: null });
+  };
 
   handleLoginOpen = () => {
     this.setState({ loginOpen: true });
@@ -159,8 +181,15 @@ class Header extends React.Component {
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
-        <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
+        <MenuItem onClick={this.handleMenuClose}><div className={classes.sectionDesktop} onClick={this.handleLogout}>
+          <Button color="inherit">Logout</Button>
+        </div></MenuItem>
+        <MenuItem onClick={this.handleMenuClose}><Link component={favesLink} className={classes.sectionDesktop}>
+          <Button color="inherit">Favorites</Button>
+        </Link></MenuItem>
+        <MenuItem onClick={this.handleMenuClose}><Link component={homeLink} className={classes.sectionDesktop}>
+          <Button color="inherit">Home</Button>
+        </Link></MenuItem>
       </Menu>
     );
 
@@ -202,15 +231,15 @@ class Header extends React.Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
-              <MenuIcon />
-            </IconButton>
             <Typography className={classes.title} variant="h6" color="inherit" noWrap>
               Story Board
             </Typography>
             <div className={classes.search}>
               <SearchBar
-                onRequestSearch={(value) => this.handleSearch(DOMPurify.sanitize(value))}
+                onRequestSearch={(value) => {
+                  this.handleSearch(value);
+                  this.props.history.push('/');
+                }}
               />
             </div>
             <div className={classes.grow}/>
@@ -220,12 +249,21 @@ class Header extends React.Component {
                 <Typography className={classes.title} variant="h6" color="inherit" noWrap>
                   {'Logged in as ' + this.props.reducer.username}
                 </Typography>
-                <div className={classes.sectionDesktop} onClick={this.handleLogout}>
-                  <Button color="inherit">Logout</Button>
+                <div className={classes.sectionDesktop}>
+                  <IconButton
+                    aria-owns={isMenuOpen ? 'material-appbar' : undefined}
+                    aria-haspopup="true"
+                    onClick={this.handleProfileMenuOpen}
+                    color="inherit"
+                  >
+                    <AccountCircle />
+                  </IconButton>
                 </div>
-                <Link component={MyLink} className={classes.sectionDesktop}>
-                  <Button color="inherit">Favorites</Button>
-                </Link>
+                <div className={classes.sectionMobile}>
+                  <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
+                    <MoreIcon />
+                  </IconButton>
+                </div>
               </div>
             ) : (
               <div>
@@ -271,4 +309,4 @@ Header = withStyles(styles)(Header);
 
 Header = connect(mapStateToProps, mapDispatchToProps)(Header);
 
-export default Header;
+export default withRouter(Header);

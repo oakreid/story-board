@@ -32,7 +32,6 @@ class Root extends React.Component {
 
   render() {
     const { search_results, session, username, current_user_favorites } = this.props.reducer;
-    console.log(current_user_favorites)
     return (<div>
       <Router>
         <Header props={this.props}/>
