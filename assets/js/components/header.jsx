@@ -33,7 +33,13 @@ import SearchBar from 'material-ui-search-bar';
 import {login, register, logout, newsapi_search} from '../redux/actions';
 import { bindActionCreators } from 'redux'
 import {connect} from 'react-redux';
+<<<<<<< HEAD
 import Form from './form';
+=======
+import Form from './form'
+import DOMPurify from 'dompurify';
+
+>>>>>>> b1b78e390429c0ebcef3cf34c195108ef9067ae8
 
 const favesLink = props => <RouterLink to="/favorites" {...props} />
 const homeLink = props => <RouterLink to="/" {...props} />
@@ -231,8 +237,8 @@ class Header extends React.Component {
             <div className={classes.search}>
               <SearchBar
                 onRequestSearch={(value) => {
-                  this.props.history.push('/', { some: 'state' });
                   this.handleSearch(value);
+                  this.props.history.push('/');
                 }}
               />
             </div>

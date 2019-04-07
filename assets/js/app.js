@@ -19,6 +19,7 @@ import "phoenix_html"
 import jQuery from 'jquery';
 window.jQuery = window.$ = jQuery;
 import _ from "lodash";
+import socket from "./socket";
 
 // Import local files
 //
@@ -29,5 +30,8 @@ import root_init from "./root";
 
 $(() => {
   let node = $('#root')[0];
-  root_init(node);
+  if (node) {
+    let channel = socket.channel("chat:lobby", {});
+    root_init(node, channel);
+  }
 });
