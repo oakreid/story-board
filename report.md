@@ -40,7 +40,9 @@ appear in the "favorites" section of a logged in user's webapp
 and are presented in the same easy-to-read manner that they were
 on the search page. Furthermore, logged in users are granted
 access to a global chat client, where they can share discussions
-about current events, trending articles, etc.
+about current events, trending articles, etc. Last but not least 
+users can share articles they find on our site to social media 
+platforms of their choice.
 
 ### How do users interact with your application? What can they accomplish by doing so?
 In our app, the central functionality derives from the navigation
@@ -50,8 +52,10 @@ the nav bar to search for news articles across the web. Assuming
 their query is legitimate, a number of tiles containing details
 about news articles that match the query will appear on the home
 page. If an article piques a user's interest they can click on the
-link icon in on the tile of that article to view the entire thing
-on the site it originated from. From there, a user can login or
+the tile of that article to view the entire thing
+on the site it originated from, or click on the share button of 
+the article tile to share it on the social media platform of their 
+choice. From there, a user can login or
 register an account on the site to unlock further functionality.
 This can be accomplished by using the "Login" or "Register" buttons
 on the right side of the site's nav bar. Both of these will open
