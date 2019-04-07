@@ -6,6 +6,7 @@ import { Link, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import classnames from 'classnames';
+import ButtonBase from '@material-ui/core/ButtonBase';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -30,6 +31,10 @@ import Share from './share';
 const styles = theme => ({
   card: {
     maxWidth: 400,
+  },
+  cardAction: {
+    display: 'block',
+    textAlign: 'initial'
   },
   media: {
     height: 0,
@@ -110,6 +115,10 @@ class Article extends React.Component {
     return (
       <div>
       <Card className={classes.card}>
+      <ButtonBase
+          className={classes.cardAction}
+          onClick={event => window.location = source.url}
+      >
         <CardHeader
           title={source.title}
           subheader={source.publishedAt}
@@ -123,6 +132,7 @@ class Article extends React.Component {
             {source.description}
           </Typography>
         </CardContent>
+        </ButtonBase>
         <CardActions className={classes.actions} disableActionSpacing>
           <IconButton aria-label="Add to favorites" onClick={() => this.handleClick(source, session)} disabled={!session}>
             <FavoriteIcon />
