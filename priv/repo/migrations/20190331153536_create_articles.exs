@@ -8,7 +8,8 @@ defmodule StoryBoard.Repo.Migrations.CreateArticles do
       add :title, :text, null: false
       add :description, :text, null: false
       add :url, :text, null: false
-      add :image, :text, null: false
+      add :urlToImage, :text, null: false
+      add :publishedAt, :text, null: false
       add :user_id, references(:users, on_delete: :delete_all), null: false
 
       timestamps()

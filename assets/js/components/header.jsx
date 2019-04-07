@@ -1,59 +1,272 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
 import $ from 'jquery';
-import { Link, BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import InputBase from '@material-ui/core/InputBase';
+import Badge from '@material-ui/core/Badge';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import { fade } from '@material-ui/core/styles/colorManipulator';
+import { withStyles } from '@material-ui/core/styles';
+import MenuIcon from '@material-ui/icons/Menu';
+import SearchIcon from '@material-ui/icons/Search';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import MailIcon from '@material-ui/icons/Mail';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import MoreIcon from '@material-ui/icons/MoreVert';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
+import SearchBar from 'material-ui-search-bar';
+import {login, register, logout, newsapi_search} from '../redux/actions';
+import { bindActionCreators } from 'redux'
+import {connect} from 'react-redux';
+import Form from './form'
+
+const MyLink = props => <RouterLink to="/favorites" {...props} />
+
+const styles = theme => ({
+  root: {
+    width: '100%',
+  },
+  grow: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginLeft: -12,
+    marginRight: 20,
+  },
+  title: {
+    display: 'none',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
+    },
+  },
+  search: {
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.common.white, 0.25),
+    },
+    marginRight: theme.spacing.unit * 2,
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing.unit * 3,
+      width: 'auto',
+    },
+  },
+  searchIcon: {
+    width: theme.spacing.unit * 9,
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputRoot: {
+    color: 'inherit',
+    width: '100%',
+  },
+  inputInput: {
+    paddingTop: theme.spacing.unit,
+    paddingRight: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit,
+    paddingLeft: theme.spacing.unit * 10,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: 200,
+    },
+  },
+  sectionDesktop: {
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      display: 'flex',
+    },
+  },
+  sectionMobile: {
+    display: 'flex',
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
+  },
+});
 
 class Header extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      anchorEl: null,
+      mobileMoreAnchorEl: null,
+      loginOpen: false,
+      registerOpen: false
+    };
+    this.searchText = "";
+  }
+
+  handleLoginOpen = () => {
+    this.setState({ loginOpen: true });
+  };
+
+  handleLoginClose = () => {
+    this.setState({ loginOpen: false });
+  };
+
+  handleRegisterOpen = () => {
+    this.setState({ registerOpen: true });
+  };
+
+  handleRegisterClose = () => {
+    this.setState({ registerOpen: false });
+  };
+
+  handleLogout = () => {
+    this.props.logout();
+  }
+
+  handleSearch = (value) => {
+    this.props.newsapi_search(value);
   }
 
   render() {
-    let {root} = this.props;
+    const { anchorEl, mobileMoreAnchorEl, loginOpen, registerOpen } = this.state;
+    const { classes } = this.props;
+    const isMenuOpen = Boolean(anchorEl);
+    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+    const renderMenu = (
+      <Menu
+        anchorEl={anchorEl}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={isMenuOpen}
+        onClose={this.handleMenuClose}
+      >
+        <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
+        <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
+      </Menu>
+    );
+
+    const renderMobileMenu = (
+      <Menu
+        anchorEl={mobileMoreAnchorEl}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={isMobileMenuOpen}
+        onClose={this.handleMenuClose}
+      >
+        <MenuItem onClick={this.handleMobileMenuClose}>
+          <IconButton color="inherit">
+            <Badge badgeContent={4} color="secondary">
+              <MailIcon />
+            </Badge>
+          </IconButton>
+          <p>Messages</p>
+        </MenuItem>
+        <MenuItem onClick={this.handleMobileMenuClose}>
+          <IconButton color="inherit">
+            <Badge badgeContent={11} color="secondary">
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+          <p>Notifications</p>
+        </MenuItem>
+        <MenuItem onClick={this.handleProfileMenuOpen}>
+          <IconButton color="inherit">
+            <AccountCircle />
+          </IconButton>
+          <p>Profile</p>
+        </MenuItem>
+      </Menu>
+    );
     let session_info;
     let favorites;
-    if (root.state.session == null) {
-      session_info = (<div className="form-inline my-2">
-        <input type="text" placeholder="username"
-          onChange={(ev) => root.update_login_form({username: ev.target.value})} />
-        <input type="password" placeholder="password"
-          onChange={(ev) => root.update_login_form({password: ev.target.value})} />
-        <button className="btn btn-secondary" onClick={() => root.login()}>Login</button>
-        <button className="btn btn-secondary" onClick={() => root.register()}>Register</button>
-      </div>);
-      favorites = (<p></p>);
-    } else {
-      session_info = (<div className="my-2">
-        <p className="text-success">Logged in as: {root.state.login_form.username}</p>
-        <p className="text-success">My ID: {root.state.session.user_id}</p>
-        <button className="btn btn-secondary" onClick={() => root.logout()}>Logout</button>
-      </div>);
-      favorites = (<p><Link to={"/favorites"} onClick={() => root.fetch_current_user_favorites()}>My Favorites</Link></p>);
-    }
-
-    return (<div>
-      <div className="row my-2 bg-dark">
-        <div className="col-3">
-          <h1 className="text-white">Story Board</h1>
-        </div>
-        <div className="col-2">
-          <p><Link to={"/"}>Search Articles</Link></p>
-        </div>
-        <div className="col-2">
-          {favorites}
-        </div>
-        <div className="col-3">
-          {session_info}
-        </div>
+    return (
+      <div className={classes.root}>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
+              <MenuIcon />
+            </IconButton>
+            <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+              Story Board
+            </Typography>
+            <div className={classes.search}>
+              <SearchBar
+                onRequestSearch={(value) => this.handleSearch(value)}
+              />
+            </div>
+            <div className={classes.grow}/>
+            <div className={classes.sectionDesktop}>
+            { this.props.reducer.session ? (
+              <div>
+                <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+                  {'Logged in as ' + this.props.reducer.username}
+                </Typography>
+                <div className={classes.sectionDesktop} onClick={this.handleLogout}>
+                  <Button color="inherit">Logout</Button>
+                </div>
+                <Link component={MyLink} className={classes.sectionDesktop}>
+                  <Button color="inherit">Favorites</Button>
+                </Link>
+              </div>
+            ) : (
+              <div>
+                <div className={classes.sectionDesktop} onClick={this.handleLoginOpen}>
+                  <Button color="inherit">Login</Button>
+                </div>
+                <Form action={this.props.login} classes={classes} open={loginOpen} onClose={this.handleLoginClose} anchorEl={anchorEl} mobileMoreAnchorEl={mobileMoreAnchorEl}/>
+                <div className={classes.sectionDesktop} onClick={this.handleRegisterOpen}>
+                  <Button color="inherit">Register</Button>
+                </div>
+                <Form action={this.props.register} classes={classes} open={registerOpen} onClose={this.handleRegisterClose} anchorEl={anchorEl} mobileMoreAnchorEl={mobileMoreAnchorEl}/>
+              </div>
+            )}
+            </div>
+          </Toolbar>
+        </AppBar>
+        {renderMenu}
+        {renderMobileMenu}
       </div>
-      <div className="row my-2 bg-white">
-        <input type="text" placeholder="Search here"
-          onChange={(ev) => root.update_search_bar(ev.target.value)} />
-        <button className="btn btn-secondary">Go</button>
-      </div>
-    </div>);
+    );
   }
 }
+
+const mapStateToProps = state => ({
+  ...state
+});
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({
+    login: (login_form) => login(login_form),
+    logout,
+    register: (login_form) => register(login_form),
+    newsapi_search
+  },
+  dispatch
+)};
+
+Header.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+Header = withStyles(styles)(Header);
+
+Header = connect(mapStateToProps, mapDispatchToProps)(Header);
 
 export default Header;

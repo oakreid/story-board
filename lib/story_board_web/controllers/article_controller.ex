@@ -28,9 +28,10 @@ defmodule StoryBoardWeb.ArticleController do
   def create(conn, %{"article" => article_params}) do
     IO.puts("[HIT SERVER] create article: " <> inspect(article_params))
     with {:ok, %Article{} = article} <- Articles.create_article(article_params) do
+      resp = %{}
       conn
       |> put_resp_header("location", Routes.article_path(conn, :show, article))
-      |> send_resp(:created, "")
+      |> send_resp(:created, Jason.encode!(resp))
     end
   end
 

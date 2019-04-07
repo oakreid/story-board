@@ -11,7 +11,13 @@ defmodule StoryBoard.Articles do
   def fcuf_articles(uid) do
     list_articles()
     |> Enum.filter(fn(x) -> x.user_id == uid end)
-    |> Enum.map(fn(x) -> x |> Map.from_struct() |> Map.drop([:__meta__, :user]) end)
+    |> Enum.map(fn(x) ->
+      temp = x
+      x
+      |> Map.from_struct()
+      |> Map.drop([:__meta__, :user])
+      |> Map.put(:source, %{name: Map.get(temp, :source)})
+    end)
   end
 
   @doc """
@@ -56,8 +62,17 @@ defmodule StoryBoard.Articles do
 
   """
   def create_article(attrs \\ %{}) do
+    filtered_attrs = Enum.reduce(attrs, %{}, fn (kv, acc) ->
+      IO.puts(inspect(kv))
+      if elem(kv, 1) == nil do
+        Map.put(acc, elem(kv, 0), "unknown")
+      else
+        Map.put(acc, elem(kv, 0), elem(kv, 1))
+      end
+    end)
+    IO.puts(inspect(filtered_attrs))
     %Article{}
-    |> Article.changeset(attrs)
+    |> Article.changeset(filtered_attrs)
     |> Repo.insert()
   end
 
