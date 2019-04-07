@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
 import $ from 'jquery';
-import { Link, BrowserRouter as Router, Route } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import classnames from 'classnames';
@@ -20,7 +20,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import {favorite} from '../redux/actions';
+import {favorite, unfavorite} from '../redux/actions';
 import { bindActionCreators } from 'redux'
 import {connect} from 'react-redux';
 
@@ -51,16 +51,14 @@ const styles = theme => ({
 });
 
 class Article extends React.Component {
-  state = { expanded: false };
 
-  handleExpandClick = () => {
-    this.setState(state => ({ expanded: !state.expanded }));
-  };
-
-  handleFavorite = (article) => {
+  handleClick = (article) => {
     const { session, username } = this.props;
-    const {source, author, title, description, url, urlToImage, publishedAt} = article;
+    const {id, source, author, title, description, url, urlToImage, publishedAt} = article;
     const { user_id } = session;
+    id ?
+    this.props.unfavorite({ id }, session, username)
+    :
     this.props.favorite({
       article: {
         source: source.name,
@@ -94,20 +92,11 @@ class Article extends React.Component {
           </Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="Add to favorites" onClick={() => this.handleFavorite(source, session)} disabled={!session}>
+          <IconButton aria-label="Add to favorites" onClick={() => this.handleClick(source, session)} disabled={!session}>
             <FavoriteIcon />
           </IconButton>
           <IconButton aria-label="Share">
             <ShareIcon />
-          </IconButton>
-          <IconButton
-            className={classnames(classes.expand, {
-              [classes.expandOpen]: this.state.expanded,
-            })}
-            onClick={this.handleExpandClick}
-            aria-expanded={this.state.expanded}
-            aria-label="Show more"
-          >
           </IconButton>
         </CardActions>
       </Card>
@@ -123,7 +112,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-    favorite: (article, session, username) => favorite(article, session, username)
+    favorite: (article, session, username) => favorite(article, session, username),
+    unfavorite: (id, session, username) => unfavorite(id, session, username)
   },
   dispatch
 )};
