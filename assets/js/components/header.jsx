@@ -34,6 +34,8 @@ import {login, register, logout, newsapi_search} from '../redux/actions';
 import { bindActionCreators } from 'redux'
 import {connect} from 'react-redux';
 import Form from './form'
+import DOMPurify from 'dompurify';
+
 
 const MyLink = props => <RouterLink to="/favorites" {...props} />
 
@@ -208,7 +210,7 @@ class Header extends React.Component {
             </Typography>
             <div className={classes.search}>
               <SearchBar
-                onRequestSearch={(value) => this.handleSearch(value)}
+                onRequestSearch={(value) => this.handleSearch(DOMPurify.sanitize(value))}
               />
             </div>
             <div className={classes.grow}/>
