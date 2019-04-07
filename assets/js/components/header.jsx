@@ -268,11 +268,11 @@ class Header extends React.Component {
                 <div className={classes.sectionDesktop} onClick={this.handleLoginOpen}>
                   <Button color="inherit">Login</Button>
                 </div>
-                <Form action={this.props.login} classes={classes} open={loginOpen} onClose={this.handleLoginClose} anchorEl={anchorEl} mobileMoreAnchorEl={mobileMoreAnchorEl}/>
+                <Form action={this.props.login} text="Login" classes={classes} open={loginOpen} onClose={this.handleLoginClose} anchorEl={anchorEl} mobileMoreAnchorEl={mobileMoreAnchorEl}/>
                 <div className={classes.sectionDesktop} onClick={this.handleRegisterOpen}>
                   <Button color="inherit">Register</Button>
                 </div>
-                <Form action={this.props.register} classes={classes} open={registerOpen} onClose={this.handleRegisterClose} anchorEl={anchorEl} mobileMoreAnchorEl={mobileMoreAnchorEl}/>
+                <Form action={this.props.register} text="Register" classes={classes} open={registerOpen} onClose={this.handleRegisterClose} anchorEl={anchorEl} mobileMoreAnchorEl={mobileMoreAnchorEl}/>
               </div>
             )}
             </div>

@@ -76,7 +76,7 @@ class Form extends React.Component {
   }
 
   render() {
-    const { action, anchorEl, mobileMoreAnchorEl, classes, open } = this.props;
+    const { action, text, anchorEl, mobileMoreAnchorEl, classes, open } = this.props;
     return (
       <div className={classes.root}>
             <Dialog
@@ -84,12 +84,8 @@ class Form extends React.Component {
               onClose={this.handleClose}
               aria-labelledby="form-dialog-title"
             >
-            <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+            <DialogTitle id="form-dialog-title">{text}</DialogTitle>
             <DialogContent>
-              <DialogContentText>
-                To subscribe to this website, please enter your email address here. We will send
-                updates occasionally.
-              </DialogContentText>
               <TextField
                 autoFocus
                 margin="dense"
