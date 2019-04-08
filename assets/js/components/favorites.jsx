@@ -1,5 +1,6 @@
 import React from 'react';
 import Article from './article';
+import { withRouter } from 'react-router-dom';
 import StackGrid from "react-stack-grid";
 
 class Favorites extends React.Component {
@@ -9,6 +10,9 @@ class Favorites extends React.Component {
 
   render() {
     let {session, username, cuf} = this.props;
+    if (!session) {
+      this.props.history.push('/');
+    }
     return (<div>
       <StackGrid
           columnWidth={300}
@@ -25,4 +29,4 @@ class Favorites extends React.Component {
   }
 }
 
-export default Favorites;
+export default withRouter(Favorites);

@@ -55,7 +55,10 @@ class Chat extends React.Component {
   }
 
   render() {
-    let {root} = this.props;
+    let {root, session} = this.props;
+    if (!session) {
+      this.props.history.push("/");
+    }
     let chat_log = this.buildChat();
     return (<div id="chatMain">
       <TextField placeholder="Chat with fellow humans" variant="outlined" margin="normal" id="chatsubmit"/>
