@@ -7,7 +7,7 @@ The team consisted of Oakley Reid (oakreid) and Samuel Siegmeister
 (sss13gm31st3r)
 
 ### What's the URL of your deployed app?
-http://storyboard.oakreid.info
+https://storyboard.oakreid.info
 
 ### What's the URL of your GitHub repository?
 https://github.com/oakreid/story_board
@@ -19,7 +19,7 @@ Yes
 Oakley Reid wrote the internal API, implemented the calls to the
 external API, set up the database objects/migrations, implemented
 Phoenix Channels and the chat client (front and back end), deployed
-the application to http://storyboard.oakreid.info, and wrote this
+the application to https://storyboard.oakreid.info, and wrote this
 report. Samuel Siegmeister wrote the front end using react and
 redux for state management, and material-ui for the styling.
 Samuel also designed the application in terms of UI as well as the
