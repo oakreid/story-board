@@ -46,10 +46,6 @@ const styles = theme => ({
   grow: {
     flexGrow: 1,
   },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
   title: {
     display: 'none',
     [theme.breakpoints.up('sm')]: {
@@ -71,41 +67,8 @@ const styles = theme => ({
       width: 'auto',
     },
   },
-  searchIcon: {
-    width: theme.spacing.unit * 9,
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inputRoot: {
-    color: 'inherit',
-    width: '100%',
-  },
-  inputInput: {
-    paddingTop: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 10,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: 200,
-    },
-  },
   sectionDesktop: {
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
-    },
-  },
-  sectionMobile: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
+    display: 'flex'
   },
 });
 
@@ -114,7 +77,6 @@ class Header extends React.Component {
     super(props);
     this.state = {
       anchorEl: null,
-      mobileMoreAnchorEl: null,
       loginOpen: false,
       registerOpen: false
     };
@@ -127,15 +89,6 @@ class Header extends React.Component {
 
   handleMenuClose = () => {
     this.setState({ anchorEl: null });
-    this.handleMobileMenuClose();
-  };
-
-  handleMobileMenuOpen = event => {
-    this.setState({ mobileMoreAnchorEl: event.currentTarget });
-  };
-
-  handleMobileMenuClose = () => {
-    this.setState({ mobileMoreAnchorEl: null });
   };
 
   handleLoginOpen = () => {
@@ -163,10 +116,9 @@ class Header extends React.Component {
   }
 
   render() {
-    const { anchorEl, mobileMoreAnchorEl, loginOpen, registerOpen } = this.state;
+    const { anchorEl, loginOpen, registerOpen } = this.state;
     const { classes } = this.props;
     const isMenuOpen = Boolean(anchorEl);
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
     const renderMenu = (
       <Menu
@@ -191,38 +143,6 @@ class Header extends React.Component {
       </Menu>
     );
 
-    const renderMobileMenu = (
-      <Menu
-        anchorEl={mobileMoreAnchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMobileMenuOpen}
-        onClose={this.handleMenuClose}
-      >
-        <MenuItem onClick={this.handleMobileMenuClose}>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <MailIcon />
-            </Badge>
-          </IconButton>
-          <p>Messages</p>
-        </MenuItem>
-        <MenuItem onClick={this.handleMobileMenuClose}>
-          <IconButton color="inherit">
-            <Badge badgeContent={11} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <p>Notifications</p>
-        </MenuItem>
-        <MenuItem onClick={this.handleProfileMenuOpen}>
-          <IconButton color="inherit">
-            <AccountCircle />
-          </IconButton>
-          <p>Profile</p>
-        </MenuItem>
-      </Menu>
-    );
     let session_info;
     let favorites;
     return (
@@ -257,29 +177,23 @@ class Header extends React.Component {
                     <AccountCircle />
                   </IconButton>
                 </div>
-                <div className={classes.sectionMobile}>
-                  <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
-                    <MoreIcon />
-                  </IconButton>
-                </div>
               </div>
             ) : (
               <div>
                 <div className={classes.sectionDesktop} onClick={this.handleLoginOpen}>
                   <Button color="inherit">Login</Button>
                 </div>
-                <Form action={this.props.login} text="Login" classes={classes} open={loginOpen} onClose={this.handleLoginClose} anchorEl={anchorEl} mobileMoreAnchorEl={mobileMoreAnchorEl}/>
+                <Form action={this.props.login} text="Login" classes={classes} open={loginOpen} onClose={this.handleLoginClose} anchorEl={anchorEl} />
                 <div className={classes.sectionDesktop} onClick={this.handleRegisterOpen}>
                   <Button color="inherit">Register</Button>
                 </div>
-                <Form action={this.props.register} text="Register" classes={classes} open={registerOpen} onClose={this.handleRegisterClose} anchorEl={anchorEl} mobileMoreAnchorEl={mobileMoreAnchorEl}/>
+                <Form action={this.props.register} text="Register" classes={classes} open={registerOpen} onClose={this.handleRegisterClose} anchorEl={anchorEl} />
               </div>
             )}
             </div>
           </Toolbar>
         </AppBar>
         {renderMenu}
-        {renderMobileMenu}
       </div>
     );
   }

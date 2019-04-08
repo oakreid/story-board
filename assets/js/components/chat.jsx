@@ -1,8 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import _ from 'lodash';
-import $ from 'jquery';
-import { Link, BrowserRouter as Router, Route } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import DOMPurify from 'dompurify';

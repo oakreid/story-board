@@ -1,15 +1,6 @@
 //Component taken from https://github.com/nygardk/react-share/blob/master/demo/Demo.jsx
 import React, { Component } from 'react';
 import {
-  FacebookShareCount,
-  GooglePlusShareCount,
-  LinkedinShareCount,
-  PinterestShareCount,
-  VKShareCount,
-  OKShareCount,
-  RedditShareCount,
-  TumblrShareCount,
-
   FacebookShareButton,
   GooglePlusShareButton,
   LinkedinShareButton,
