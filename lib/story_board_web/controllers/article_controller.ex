@@ -28,16 +28,16 @@ defmodule StoryBoardWeb.ArticleController do
   def create(conn, %{"article" => article_params}) do
     IO.puts("[HIT SERVER] create article: " <> inspect(article_params))
     article = Articles.create_article(article_params)
+    IO.puts(inspect(article))
     case article do
-      {:ok, _info} ->
+      {:ok, a} ->
         resp = %{}
         conn
-        |> put_resp_header("location", Routes.article_path(conn, :show, article))
+        |> put_resp_header("location", Routes.article_path(conn, :show, a))
         |> send_resp(:created, Jason.encode!(resp))
       _ ->
         resp = %{}
         conn
-        |> put_resp_header("location", Routes.article_path(conn, :show, article))
         |> send_resp(:error, Jason.encode!(resp))
     end
   end
